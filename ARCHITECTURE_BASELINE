@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+architecture_repository: https://github.com/SHUGOSHAx/wealthpilot-arch
+implementation_repository: https://github.com/SHUGOSHAx/wealthpilot
+recorded_at: 2026-09-04T09:36:03Z
+
+baseline:
+  name: Architecture Baseline 1
+  tag: architecture-baseline-1
+  commit: 66085f16bf479018dc0e139262eb283f57945bf3
+
+accepted_addenda:
+  - name: Walking Skeleton Contract Addendum 1
+    tag: walking-skeleton-contract-addendum-1
+    commit: 4ad0b9fa6f3b4a20a8f3ea480724c2fbe3098c14
+    schema_version: 1.0.0
+    schema_path: docs/contracts/schemas/walking-skeleton-contract-addendum-1.schema.json
+    schema_sha256: 5b22d0a3e668244896483132d795794687b4b90379228c5815c0f32a1f7a1577
+
+effective_architecture_commit: 4ad0b9fa6f3b4a20a8f3ea480724c2fbe3098c14
+
+notes:
+  - The final machine verification authority is the immutable Git commit SHA, not a branch name.
+  - ARCHITECTURE_BASELINE.json is retained alongside this YAML record because Walking Skeleton Contract Addendum 1 requires that machine-readable format.

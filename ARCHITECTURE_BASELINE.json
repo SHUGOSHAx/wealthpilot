@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "architecture_repository": "https://github.com/SHUGOSHAx/wealthpilot-arch.git",
+  "implementation_repository": "https://github.com/SHUGOSHAx/wealthpilot.git",
+  "baseline_name": "Architecture Baseline 1",
+  "baseline_tag": "architecture-baseline-1",
+  "baseline_commit": "66085f16bf479018dc0e139262eb283f57945bf3",
+  "contract_addenda": [
+    {
+      "name": "Walking Skeleton Contract Addendum 1",
+      "schema_version": "1.0.0",
+      "repository_path": "docs/contracts/walking-skeleton-contract-addendum-1.md",
+      "schema_path": "docs/contracts/schemas/walking-skeleton-contract-addendum-1.schema.json",
+      "git_tag": "walking-skeleton-contract-addendum-1",
+      "git_commit": "4ad0b9fa6f3b4a20a8f3ea480724c2fbe3098c14",
+      "schema_sha256": "5b22d0a3e668244896483132d795794687b4b90379228c5815c0f32a1f7a1577"
+    }
+  ],
+  "effective_architecture_commit": "4ad0b9fa6f3b4a20a8f3ea480724c2fbe3098c14",
+  "recorded_at": "2026-09-04T09:36:03Z"
+}

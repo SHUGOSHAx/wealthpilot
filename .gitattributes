@@ -1,0 +1,2 @@
+# Preserve the byte-identical historical Engineering Handoff, including intentional Markdown hard-break spaces.
+docs/engineering/engineering-handoff-report.md whitespace=-trailing-space
