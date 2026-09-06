@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.python-version.local
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node / pnpm
+node_modules/
+.pnpm-store/
+.next/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Editors and operating systems
+.DS_Store
+**/.DS_Store
+.idea/
+.vscode/
+
+# Test and build output
+.coverage
+coverage/
+dist/
+build/

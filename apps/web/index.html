@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f4f1e9" />
+    <meta
+      name="description"
+      content="WealthPilot 合成数据财富研究演示：从个人财务快照到个性化证券研究。"
+    />
+    <title>WealthPilot · Personal Wealth Research</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="WealthPilot 首页">
+          <span class="brand-mark" aria-hidden="true">W</span>
+          <span>
+            <strong>WealthPilot</strong>
+            <small>Personal Wealth Research</small>
+          </span>
+        </a>
+        <div class="topbar-meta">
+          <span class="environment-pill">DEMO · SYNTHETIC DATA</span>
+          <span id="api-status" class="api-status is-checking" role="status">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>正在连接</span>
+          </span>
+        </div>
+      </header>
+
+      <main id="main">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <p class="eyebrow">YOUR FINANCES, IN CONTEXT</p>
+            <h1 id="page-title">先看全局，再谈一只股票。</h1>
+            <p class="hero-lede">
+              从一份合成财务流水开始，建立你的完整财务快照，再获得与承受能力相匹配的研究结论。
+            </p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <div class="orbit-core"><span>净资产</span><strong>¥</strong></div>
+            <span class="orbit-dot dot-one"></span>
+            <span class="orbit-dot dot-two"></span>
+            <span class="orbit-dot dot-three"></span>
+          </div>
+        </section>
+
+        <nav class="journey" aria-label="演示流程">
+          <ol>
+            <li class="is-active" data-step-indicator="1"><span>01</span>导入财务数据</li>
+            <li data-step-indicator="2"><span>02</span>查看财务快照</li>
+            <li data-step-indicator="3"><span>03</span>研究个人适配性</li>
+          </ol>
+        </nav>
+
+        <section id="import-section" class="panel import-panel" aria-labelledby="import-title">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">STEP 01</p>
+              <h2 id="import-title">建立个人财务上下文</h2>
+              <p>上传符合演示格式的 synthetic CSV，或使用内置示例开始。</p>
+            </div>
+            <span class="privacy-badge">仅限合成数据</span>
+          </div>
+
+          <div class="upload-zone" id="upload-zone" data-testid="upload-zone">
+            <input id="csv-file" type="file" accept=".csv,text/csv" />
+            <div class="upload-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 002 2h10a2 2 0 002-2v-4" /></svg>
+            </div>
+            <div>
+              <strong id="file-label">拖入 CSV，或选择文件</strong>
+              <span>请勿上传真实姓名、账号、卡号或凭据</span>
+            </div>
+            <button id="choose-file" type="button" class="button button-secondary">选择 CSV</button>
+          </div>
+
+          <div class="import-actions">
+            <button id="load-demo" type="button" class="button button-primary" data-testid="load-demo">
+              <span class="button-icon" aria-hidden="true">✦</span>
+              使用演示数据
+            </button>
+            <button id="import-file" type="button" class="button button-dark" disabled data-testid="import-file">
+              生成财务快照
+            </button>
+            <p id="import-status" class="inline-status" role="status" aria-live="polite"></p>
+          </div>
+          <div id="import-error" class="alert alert-error" role="alert" hidden></div>
+        </section>
+
+        <section id="snapshot-section" class="section-block" aria-labelledby="snapshot-title" hidden>
+          <div class="section-heading-row">
+            <div>
+              <p class="section-kicker">STEP 02</p>
+              <h2 id="snapshot-title">你的财务安全边界</h2>
+            </div>
+            <div class="as-of">快照时点 <time id="snapshot-as-of">—</time></div>
+          </div>
+
+          <div class="metrics-grid">
+            <article class="metric-card metric-primary">
+              <span>净资产</span>
+              <strong id="metric-net-worth" data-testid="net-worth">—</strong>
+              <small>资产 − 负债</small>
+            </article>
+            <article class="metric-card">
+              <span>总资产</span>
+              <strong id="metric-assets" data-testid="assets">—</strong>
+              <small>当前可见账户合计</small>
+            </article>
+            <article class="metric-card">
+              <span>总负债</span>
+              <strong id="metric-liabilities" data-testid="liabilities">—</strong>
+              <small>待偿还债务合计</small>
+            </article>
+          </div>
+
+          <div class="insight-grid">
+            <article class="insight-card">
+              <div class="insight-icon cashflow" aria-hidden="true">↗</div>
+              <div>
+                <span>月度现金流</span>
+                <strong id="metric-cash-flow">—</strong>
+              </div>
+              <p id="cash-flow-detail">收入与支出的确定性汇总</p>
+            </article>
+            <article class="insight-card">
+              <div class="insight-icon spending" aria-hidden="true">≋</div>
+              <div>
+                <span>月均支出</span>
+                <strong id="metric-monthly-spend">—</strong>
+              </div>
+              <p>用于评估流动性与承受能力</p>
+            </article>
+            <article class="insight-card">
+              <div class="insight-icon runway" aria-hidden="true">◷</div>
+              <div>
+                <span>应急储备</span>
+                <strong id="metric-emergency-months">—</strong>
+              </div>
+              <p>由确定性财务引擎计算</p>
+            </article>
+          </div>
+
+          <details class="formula-note">
+            <summary>这些数字如何计算？</summary>
+            <p>
+              所有权威数值均由后端 deterministic financial engine 计算。模型只负责研究解释，不参与资产、负债、现金流或最大建议仓位的数值计算。
+            </p>
+          </details>
+        </section>
+
+        <section id="research-section" class="panel research-panel" aria-labelledby="research-title" hidden>
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">STEP 03</p>
+              <h2 id="research-title">把投资问题放回你的生活里</h2>
+              <p>研究标的本身，也评估它是否适合你当前的财务安全边界。</p>
+            </div>
+          </div>
+
+          <form id="research-form" data-testid="research-form">
+            <div class="form-grid">
+              <label class="field">
+                <span>A 股标的</span>
+                <select id="symbol-select" name="symbol" data-testid="symbol-select">
+                  <option value="600519">600519 · 贵州茅台</option>
+                </select>
+              </label>
+              <label class="field field-question">
+                <span>你的问题</span>
+                <textarea id="research-question" name="question" rows="3" required>结合我的财务状况，这只股票是否适合我？</textarea>
+              </label>
+            </div>
+            <div class="research-actions">
+              <p class="model-note"><span aria-hidden="true">◆</span> Research Service 经统一 Model Gateway 生成解释</p>
+              <button id="run-research" class="button button-dark" type="submit" data-testid="run-research">
+                生成个性化研究
+              </button>
+            </div>
+          </form>
+          <div id="research-error" class="alert alert-error" role="alert" hidden></div>
+        </section>
+
+        <section id="research-loading" class="research-loading" aria-live="polite" hidden>
+          <div class="research-loader" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div><strong>正在生成结构化研究备忘录</strong><p id="loading-stage">读取缓存研究资料…</p></div>
+        </section>
+
+        <section id="result-section" class="section-block result-section" aria-labelledby="result-title" hidden>
+          <div class="result-header">
+            <div>
+              <p class="section-kicker">STRUCTURED RESEARCH MEMO</p>
+              <h2 id="result-title"><span id="result-symbol">—</span> · <span id="result-name">—</span></h2>
+            </div>
+            <div class="result-meta">
+              <span>缓存数据截止 <time id="research-as-of">—</time></span>
+              <span id="model-version">Model Gateway</span>
+            </div>
+          </div>
+
+          <div class="decision-card">
+            <div class="decision-copy">
+              <span class="decision-label">研究结论</span>
+              <h3 id="research-summary" data-testid="research-summary">—</h3>
+              <p id="suitability-copy">—</p>
+            </div>
+            <div class="allocation-gauge">
+              <div class="gauge" id="allocation-gauge" style="--allocation: 0">
+                <div><strong id="max-allocation" data-testid="max-allocation">—</strong><span>建议上限</span></div>
+              </div>
+              <small id="max-allocation-amount">由确定性适配引擎计算</small>
+            </div>
+          </div>
+
+          <div class="memo-grid">
+            <article class="memo-card positive">
+              <div class="memo-title"><span aria-hidden="true">＋</span><h3>关键积极因素</h3></div>
+              <ul id="positives-list"></ul>
+            </article>
+            <article class="memo-card risk">
+              <div class="memo-title"><span aria-hidden="true">!</span><h3>关键风险</h3></div>
+              <ul id="risks-list"></ul>
+            </article>
+          </div>
+
+          <article class="evidence-card">
+            <div class="evidence-heading">
+              <div><span class="evidence-icon" aria-hidden="true">◎</span><h3>证据与数据摘要</h3></div>
+              <span id="coverage-badge" class="coverage-badge">缓存演示数据</span>
+            </div>
+            <div id="evidence-list" class="evidence-list"></div>
+          </article>
+
+          <div class="warning-card" role="note">
+            <span class="warning-icon" aria-hidden="true">!</span>
+            <div><strong>风险提示</strong><p id="risk-warning">—</p></div>
+          </div>
+
+          <div class="no-trade-banner">
+            <strong>NO LIVE SIDE EFFECT</strong>
+            <span>本演示仅提供研究与模拟决策支持，不会连接券商、提交订单或执行任何真实交易。</span>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span>WealthPilot MVP · Synthetic Demo</span>
+        <p>不构成投资建议。历史与缓存数据不代表未来表现，请结合自身情况独立判断。</p>
+      </footer>
+    </div>
+  </body>
+</html>

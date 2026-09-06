@@ -1,0 +1,18 @@
+{
+  "fixture_purpose": "SYNTHETIC_PRIVACY_GATE_ONLY",
+  "source_file": "bank_privacy_canary.csv",
+  "canaries": [
+    {
+      "classification": "P2",
+      "raw_value": "WP_P2_CANARY_SYNTHETIC_NAME_LIN_MOCK",
+      "safe_alias": "SYNTHETIC_COUNTERPARTY_ALIAS_01",
+      "must_not_cross_model_gateway": true
+    },
+    {
+      "classification": "P3",
+      "raw_value": "WP_P3_CANARY_SYNTHETIC_ACCOUNT_6222000000000000",
+      "safe_alias": "SYNTHETIC_ACCOUNT_ALIAS_01",
+      "must_not_cross_model_gateway": true
+    }
+  ]
+}

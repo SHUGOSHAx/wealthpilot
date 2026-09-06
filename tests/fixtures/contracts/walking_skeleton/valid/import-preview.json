@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "artifact_id": "20000000-0000-4000-8000-000000000001",
+    "artifact_type": "IMPORT_PREVIEW",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-01T08:00:05Z",
+    "created_by": "wealthpilot.import-preview",
+    "run_id": "10000000-0000-4000-8000-000000000004",
+    "content_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "import_id": "10000000-0000-4000-8000-000000000003",
+  "preview_version": 1,
+  "preview_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "target_account_id": "10000000-0000-4000-8000-000000000001",
+  "source_file_reference": {
+    "source_type": "IMPORT_FILE",
+    "source_id": "10000000-0000-4000-8000-000000000003",
+    "source_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "locator": "synthetic-bank.csv"
+  },
+  "items": [
+    {
+      "row_id": "20000000-0000-4000-8000-000000000002",
+      "source_row_number": 2,
+      "occurred_at": "2026-08-31T01:00:00Z",
+      "description": "SYNTHETIC SALARY",
+      "direction": "INFLOW",
+      "amount": {"amount": "10000", "currency": "CNY"},
+      "category": "INCOME",
+      "classification_source": "RULE",
+      "status": "READY",
+      "source_reference": {
+        "source_type": "IMPORT_ROW",
+        "source_id": "20000000-0000-4000-8000-000000000002",
+        "source_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "locator": "row:2"
+      }
+    },
+    {
+      "row_id": "20000000-0000-4000-8000-000000000003",
+      "source_row_number": 3,
+      "occurred_at": "2026-08-31T02:00:00Z",
+      "description": "SYNTHETIC GROCERIES",
+      "direction": "OUTFLOW",
+      "amount": {"amount": "125.5", "currency": "CNY"},
+      "category": "EXPENSE",
+      "classification_source": "MODEL",
+      "status": "READY",
+      "source_reference": {
+        "source_type": "IMPORT_ROW",
+        "source_id": "20000000-0000-4000-8000-000000000003",
+        "source_hash": null,
+        "locator": "row:3"
+      }
+    }
+  ],
+  "summary": {
+    "total_count": 2,
+    "ready_count": 2,
+    "needs_confirmation_count": 0,
+    "skipped_count": 0,
+    "conflict_count": 0,
+    "inflow_total": {"amount": "10000", "currency": "CNY"},
+    "outflow_total": {"amount": "125.5", "currency": "CNY"}
+  },
+  "commit_eligible": true
+}

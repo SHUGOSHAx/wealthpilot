@@ -1,0 +1,8 @@
+{
+  "fixture_sequence_version":"1.0.0",
+  "scenario":"normal walking skeleton lifecycle",
+  "event_files":["event-run-created.json","event-run-started.json","event-run-progress.json","event-import-preview-ready.json","event-run-progress-awaiting-confirmation.json","event-run-progress-committing-ledger.json","event-import-committed.json","event-run-progress-building-snapshot.json","event-run-completed.json"],
+  "expected_event_types":["run.created","run.started","run.progress","import.preview_ready","run.progress","run.progress","import.committed","run.progress","run.completed"],
+  "expected_terminal_run_status":"COMPLETED",
+  "financial_effect_before_commit":false
+}

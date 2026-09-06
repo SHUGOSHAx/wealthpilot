@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "import_id": "10000000-0000-4000-8000-000000000003",
+  "run_id": "10000000-0000-4000-8000-000000000004",
+  "status": "PREVIEW_READY",
+  "preview": {
+    "artifact_id": "20000000-0000-4000-8000-000000000001",
+    "artifact_type": "IMPORT_PREVIEW",
+    "schema_version": "1.0.0",
+    "content_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "failure": null,
+  "updated_at": "2026-09-01T08:00:05Z"
+}

@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "artifact_id": "60000000-0000-4000-8000-000000000001",
+    "artifact_type": "FINANCIAL_SNAPSHOT",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-01T08:02:00Z",
+    "created_by": "wealthpilot.snapshot",
+    "run_id": "10000000-0000-4000-8000-000000000004",
+    "content_hash": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  "snapshot_version": 1,
+  "as_of": "2026-09-01T08:00:00Z",
+  "base_currency": "CNY",
+  "account_balances": [{
+    "account_id": "10000000-0000-4000-8000-000000000001",
+    "account_category": "ASSET",
+    "balance": {"amount": "9874.5", "currency": "CNY"},
+    "source_references": [{"source_type": "POSTING", "source_id": "posting-1", "source_hash": null, "locator": "posting:1"}]
+  }],
+  "assets": [{
+    "position_id": "60000000-0000-4000-8000-000000000002",
+    "position_type": "ACCOUNT_BALANCE",
+    "account_id": "10000000-0000-4000-8000-000000000001",
+    "value": {"amount": "9874.5", "currency": "CNY"},
+    "source_references": [{"source_type": "POSTING", "source_id": "posting-1", "source_hash": null, "locator": "posting:1"}]
+  }],
+  "liabilities": [],
+  "total_assets": {"amount": "9874.5", "currency": "CNY"},
+  "total_liabilities": {"amount": "0", "currency": "CNY"},
+  "net_worth": {"amount": "9874.5", "currency": "CNY"},
+  "source_references": [{"source_type": "JOURNAL_ENTRY", "source_id": "journal-1", "source_hash": null, "locator": "journal:1"}],
+  "calculation_metadata": {
+    "calculation_version": "1.0.0",
+    "formula": "NET_WORTH = TOTAL_ASSETS - TOTAL_LIABILITIES",
+    "rounding_mode": "ROUND_HALF_EVEN",
+    "base_currency": "CNY",
+    "ledger_cutoff_at": "2026-09-01T08:01:30Z",
+    "input_artifact_ids": ["20000000-0000-4000-8000-000000000001"],
+    "posting_count": 4
+  }
+}

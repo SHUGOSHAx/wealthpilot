@@ -1,0 +1,1 @@
+{"fixture_sequence_version":"1.0.0","scenario":"at-least-once SSE replay","source_sequence":"normal-lifecycle.json","last_event_id":"70000000-0000-4000-8000-000000000003","expected_first_replayed_sequence":4,"deduplicate_by":"event_id","order_by":"sequence","invalid_cursor_error":"SSE_CURSOR_INVALID"}

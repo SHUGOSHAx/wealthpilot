@@ -1,0 +1,1969 @@
+registry_version: "1.0.0"
+effective_architecture_commit: "4ad0b9fa6f3b4a20a8f3ea480724c2fbe3098c14"
+contract_addendum:
+  name: "Walking Skeleton Contract Addendum 1"
+  schema_version: "1.0.0"
+  schema_sha256: "5b22d0a3e668244896483132d795794687b4b90379228c5815c0f32a1f7a1577"
+scope: [M00, M01]
+live_trading: "FORBIDDEN"
+execution_authorization: "PENDING_TECHNICAL_DIRECTOR_RE_REVIEW"
+
+tasks:
+  - task_id: M00-WP0001-T01
+    milestone: M00
+    work_package: WP-0001
+    title: "Repository baseline and locked workspace bootstrap"
+    goal: "Create the reproducible Python/TypeScript workspace and make the effective architecture commit machine-verifiable without creating an application skeleton."
+    status: READY
+    owner_stream: "Stream A — Platform / repository-root owner"
+    reviewer_stream: "Stream C — Runtime / Persistence"
+    architecture_refs:
+      - "wealthpilot/AGENTS.md"
+      - "wealthpilot/ARCHITECTURE_BASELINE"
+      - "wealthpilot-arch@4ad0b9f: PLAN.md §9, §14, §17"
+      - "Walking Skeleton Contract Addendum 1 §6, §8.2"
+    input_contracts:
+      - "ARCHITECTURE_BASELINE schema 1.0.0"
+      - "ARCHITECTURE_BASELINE.json schema 1.0.0"
+      - "Architecture commit 4ad0b9fa6f3b4a20a8f3ea480724c2fbe3098c14"
+    dependencies: []
+    owned_paths:
+      - "/ARCHITECTURE_BASELINE"
+      - "/ARCHITECTURE_BASELINE.json"
+      - "/pyproject.toml"
+      - "/uv.lock"
+      - "/package.json"
+      - "/pnpm-lock.yaml"
+      - "/pnpm-workspace.yaml"
+      - "/.python-version"
+      - "/.node-version"
+      - "/.gitignore"
+      - "/.github/CODEOWNERS"
+    allowed_paths:
+      - "/README.md"
+      - "/scripts/verify-architecture-baseline.*"
+      - "/docs/engineering/bootstrap.md"
+    forbidden_paths:
+      - "/apps/**"
+      - "/packages/**"
+      - "/migrations/**"
+      - "/deploy/**"
+      - "/docs/contracts/**"
+      - "wealthpilot-arch/**"
+    implementation_scope:
+      - "Pin Python 3.12, Node LTS minor, uv and pnpm workspace metadata."
+      - "Record and verify baseline/addendum full SHAs, tags and schema hash."
+      - "Define CODEOWNERS for root, kernel, contracts, migrations/env.py, Compose, OpenAPI and root CI."
+    out_of_scope:
+      - "Application packages, production routes, domain code or architecture changes."
+      - "Dependency choices beyond the approved stack."
+    expected_outputs:
+      - "Frozen root manifests and lockfiles."
+      - "Executable baseline verification command."
+      - "Unique high-conflict-file ownership map."
+    acceptance_criteria:
+      - "Baseline verifier exits 0 only when both tags resolve to the recorded full commits and schema SHA-256 matches."
+      - "Frozen Python and Node installs succeed from lockfiles in a clean temporary checkout."
+      - "A planted baseline/tag/hash mismatch makes the verifier fail."
+      - "No application skeleton or architecture-repository write is present."
+    required_tests:
+      - "baseline integrity positive and negative tests"
+      - "uv frozen-install smoke"
+      - "pnpm frozen-install smoke"
+    privacy_classification: "P0; repository metadata only"
+    security_classification: "FOUNDATIONAL; secret-free supply-chain and ownership controls"
+    stub_real_boundary: "Real manifests, locks and verification; no app/runtime implementation."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 1
+    notes:
+      - "Sole owner of all root manifests for M00/M01."
+      - "May update existing baseline files only to repair machine-verifiable drift, never to move the effective commit."
+
+  - task_id: M00-WP0001-T02
+    milestone: M00
+    work_package: WP-0001
+    title: "Clean-clone bootstrap proof and repository boundary documentation"
+    goal: "Prove the locked workspace bootstraps reproducibly and document synthetic/real-data and repository boundaries."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / repository-root owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "Engineering Handoff §3 and §7"
+      - "Walking Skeleton Contract Addendum 1 §6"
+      - "security-privacy.md: Logs and public repository"
+    input_contracts:
+      - "Root manifests and ownership map produced by M00-WP0001-T01"
+    dependencies: [M00-WP0001-T01]
+    owned_paths:
+      - "/scripts/bootstrap.*"
+      - "/scripts/verify-repository-boundaries.*"
+      - "/docs/engineering/bootstrap.md"
+    allowed_paths:
+      - "/README.md"
+      - "/tests/bootstrap/**"
+    forbidden_paths:
+      - "/pyproject.toml"
+      - "/uv.lock"
+      - "/package.json"
+      - "/pnpm-lock.yaml"
+      - "/apps/**"
+      - "/packages/**"
+      - "wealthpilot-arch/**"
+    implementation_scope:
+      - "Provide non-interactive bootstrap and boundary checks."
+      - "Document DEV/DEMO synthetic defaults and prohibition on real data in the repository."
+    out_of_scope:
+      - "Starting Compose services or creating app packages."
+    expected_outputs:
+      - "Clean-clone bootstrap proof."
+      - "Machine check for forbidden real-data/secret locations."
+    acceptance_criteria:
+      - "Bootstrap is repeatable and a second run has no material diff."
+      - "A planted real-data path or .env secret fixture is rejected."
+    required_tests:
+      - "clean temporary checkout smoke"
+      - "repository-boundary planted-violation test"
+    privacy_classification: "P0; tests use synthetic marker files only"
+    security_classification: "FOUNDATIONAL"
+    stub_real_boundary: "Real bootstrap/repository checks; infrastructure remains absent."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 2
+    notes:
+      - "Completes WP-0001 and unlocks the general WP-0002/0003/0004 dependency gate."
+
+  - task_id: M00-WP0002-T01
+    milestone: M00
+    work_package: WP-0002
+    title: "Walking Skeleton canonical contract fixture corpus"
+    goal: "Materialize valid and invalid JSON fixtures directly from the accepted schema without defining new public fields."
+    status: READY
+    owner_stream: "Stream A — Platform / contract-fixture owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "Walking Skeleton Contract Addendum 1 §2–§6 and §8.2"
+      - "walking-skeleton-contract-addendum-1.schema.json@4ad0b9f"
+      - "ADR-0004 typed agent artifacts"
+    input_contracts:
+      - "Walking Skeleton Contract Addendum 1 JSON Schema 1.0.0"
+      - "Schema SHA-256 5b22d0a3e668244896483132d795794687b4b90379228c5815c0f32a1f7a1577"
+    dependencies: []
+    owned_paths:
+      - "/tests/fixtures/contracts/walking_skeleton/valid/**"
+      - "/tests/fixtures/contracts/walking_skeleton/invalid/**"
+      - "/tests/fixtures/contracts/walking_skeleton/sequences/**"
+    allowed_paths:
+      - "/tests/fixtures/contracts/README.md"
+    forbidden_paths:
+      - "/packages/**"
+      - "/apps/**"
+      - "/docs/contracts/**"
+      - "/docs/generated/openapi/**"
+      - "wealthpilot-arch/**"
+    implementation_scope:
+      - "Cover every top-level schema, seven events, state transitions, null semantics, money/time/hash boundaries and ErrorResponse codes."
+      - "Provide idempotency, SSE replay and checkpoint-resume scenario fixtures."
+    out_of_scope:
+      - "Validators, generated types, production code or contract interpretation beyond the normative schema."
+    expected_outputs:
+      - "Deterministic versioned fixture corpus with provenance manifest."
+    acceptance_criteria:
+      - "Every valid fixture validates against exactly the referenced 1.0.0 definition."
+      - "Every invalid fixture fails for its documented single reason."
+      - "No undeclared field or enum value is introduced."
+    required_tests:
+      - "JSON Schema fixture validation command"
+      - "fixture determinism/hash check"
+    privacy_classification: "P0; synthetic UUIDs and values only"
+    security_classification: "CONTRACT_GATE"
+    stub_real_boundary: "Real normative fixtures; no validators or runtime."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 1
+    notes:
+      - "Directly authorized READY_FOR_IMPLEMENTATION by Addendum §8.2, independent of repository scaffold implementation."
+
+  - task_id: M00-WP0002-T02
+    milestone: M00
+    work_package: WP-0002
+    title: "Minimal kernel scalar/value objects"
+    goal: "Implement the approved UUID, UTC, SHA-256, DecimalString and CNY Money rules as framework-free values."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / kernel owner"
+    reviewer_stream: "Stream B — Wealth Domain"
+    architecture_refs:
+      - "Walking Skeleton Contract Addendum 1 §3.1"
+      - "data-architecture.md: Time semantics"
+      - "Engineering Handoff §3 Shared kernel principles"
+    input_contracts:
+      - "Walking Skeleton scalar definitions 1.0.0"
+      - "M00-WP0002-T01 scalar boundary fixtures"
+    dependencies: [M00-WP0001-T02, M00-WP0002-T01]
+    owned_paths:
+      - "/packages/python/wealthpilot/kernel/**"
+      - "/tests/unit/kernel/**"
+    allowed_paths:
+      - "/tests/property/kernel/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/apps/**"
+      - "/migrations/**"
+      - "/pyproject.toml"
+    implementation_scope:
+      - "Decimal-only arithmetic, canonical serialization, UTC-Z validation and typed hashes/IDs."
+    out_of_scope:
+      - "Run, User, Account, Order, database or framework abstractions."
+    expected_outputs:
+      - "Framework-free kernel package and property tests."
+    acceptance_criteria:
+      - "Canonical decimal and UTC round-trips are exact; exponent, offset time, negative zero and invalid CNY forms fail."
+      - "Money never converts through binary float."
+    required_tests:
+      - "unit tests for all scalar constraints"
+      - "Hypothesis Decimal/Money round-trip properties"
+    privacy_classification: "P0"
+    security_classification: "FOUNDATIONAL_VALUE_INVARIANTS"
+    stub_real_boundary: "Real value objects; no domain workflow."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 3
+    notes:
+      - "Sole owner of kernel/ for M00/M01."
+
+  - task_id: M00-WP0002-T03
+    milestone: M00
+    work_package: WP-0002
+    title: "Contract registry and Python schema models"
+    goal: "Vendor the immutable normative schema by verified hash and expose strict Pydantic v2 models for M00/M01."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / contracts owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "Walking Skeleton Contract Addendum 1 §2.1, §3–§6"
+      - "ADR-0004"
+    input_contracts:
+      - "Walking Skeleton JSON Schema 1.0.0"
+      - "Kernel scalars from M00-WP0002-T02"
+      - "Canonical fixtures from M00-WP0002-T01"
+    dependencies: [M00-WP0001-T02, M00-WP0002-T01, M00-WP0002-T02]
+    owned_paths:
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/tests/contract/python/**"
+    allowed_paths:
+      - "/scripts/contracts/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/kernel/**"
+      - "/apps/**"
+      - "/contexts/**"
+      - "/docs/generated/openapi/**"
+      - "/pyproject.toml"
+    implementation_scope:
+      - "Strict models for Import, Artifact, Run/Task/Checkpoint, Event, Error and FinancialSnapshot 1.0.0."
+      - "Registry provenance and schema hash verification."
+    out_of_scope:
+      - "Business invariants not expressible by the frozen contract, API routes or persistence."
+    expected_outputs:
+      - "Versioned Python contract package and schema registry."
+    acceptance_criteria:
+      - "All valid/invalid fixtures have the expected validation outcome."
+      - "Unknown fields and enum values are rejected."
+      - "Generated/exported schema has no unreviewed semantic diff from the normative schema."
+    required_tests:
+      - "contract fixture suite"
+      - "schema provenance/hash test"
+      - "round-trip serialization test"
+    privacy_classification: "P0 schema; fixtures synthetic"
+    security_classification: "PUBLIC_CONTRACT_GATE"
+    stub_real_boundary: "Real contract validation; no producers/consumers."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 4
+    notes:
+      - "Sole owner of contracts/ for M00/M01."
+
+  - task_id: M00-WP0002-T04
+    milestone: M00
+    work_package: WP-0002
+    title: "TypeScript/OpenAPI generation and frozen snapshots"
+    goal: "Generate TypeScript types and OpenAPI component schemas from the single contract source and create drift snapshots."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / contracts owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "Walking Skeleton Contract Addendum 1 §6 Compatibility Rules"
+      - "Engineering Handoff §3 Contract boundary and drift prevention"
+    input_contracts:
+      - "Python contract registry from M00-WP0002-T03"
+      - "JSON Schema 1.0.0"
+    dependencies: [M00-WP0001-T02, M00-WP0002-T03]
+    owned_paths:
+      - "/packages/typescript/api-client/**"
+      - "/docs/generated/openapi/walking-skeleton-components.json"
+      - "/docs/generated/openapi/walking-skeleton-openapi.json"
+      - "/scripts/contracts/generate-*"
+      - "/tests/contract/typescript/**"
+    allowed_paths:
+      - "/tests/snapshots/contracts/**"
+    forbidden_paths:
+      - "/apps/web/**"
+      - "/apps/api/**"
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/package.json"
+      - "/pnpm-lock.yaml"
+    implementation_scope:
+      - "Deterministic code generation and reviewed OpenAPI component snapshot only."
+    out_of_scope:
+      - "API operation wiring or hand-written duplicate types."
+    expected_outputs:
+      - "Generated TS types, OpenAPI components and drift command."
+    acceptance_criteria:
+      - "Regeneration is byte-stable on a clean checkout."
+      - "A planted breaking schema change fails the compatibility snapshot."
+    required_tests:
+      - "generation determinism"
+      - "TS compile"
+      - "OpenAPI snapshot diff negative test"
+    privacy_classification: "P0"
+    security_classification: "PUBLIC_CONTRACT_GATE"
+    stub_real_boundary: "Real generated artifacts; no API/Web runtime."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 5
+    notes:
+      - "Sole owner of the OpenAPI snapshot."
+
+  - task_id: M00-WP0002-T05
+    milestone: M00
+    work_package: WP-0002
+    title: "Cross-language contract conformance gate"
+    goal: "Prove JSON Schema, Pydantic, generated TypeScript and OpenAPI agree for every M00/M01 public type."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / contracts owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "Walking Skeleton Contract Addendum 1 §6"
+      - "testing-evaluation.md: Contract tests"
+    input_contracts:
+      - "Contract artifacts from M00-WP0002-T01/T03/T04"
+    dependencies: [M00-WP0002-T03, M00-WP0002-T04]
+    owned_paths:
+      - "/tests/contract/conformance/**"
+      - "/scripts/contracts/check-conformance.*"
+    allowed_paths:
+      - "/tests/fixtures/contracts/walking_skeleton/**"
+    forbidden_paths:
+      - "/packages/**"
+      - "/apps/**"
+      - "/docs/generated/openapi/**"
+    implementation_scope:
+      - "Bidirectional acceptance/rejection matrix and compatibility report."
+    out_of_scope:
+      - "Changing any contract to make tests pass."
+    expected_outputs:
+      - "Machine-readable conformance report and blocking test command."
+    acceptance_criteria:
+      - "Acceptance matrix has zero cross-language disagreements."
+      - "A planted nullable/enum/unknown-field drift fails."
+    required_tests:
+      - "cross-language fixture matrix"
+      - "planted drift test"
+    privacy_classification: "P0"
+    security_classification: "PUBLIC_CONTRACT_GATE"
+    stub_real_boundary: "Real contract gate; no production consumer."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 6
+    notes:
+      - "Completes WP-0002."
+
+  - task_id: M00-WP0003-T01
+    milestone: M00
+    work_package: WP-0003
+    title: "Compose core services and health baseline"
+    goal: "Provide pinned PostgreSQL 16, Redis and Qdrant services with deterministic health checks and isolated volumes."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream C — Runtime / Persistence / Compose owner"
+    reviewer_stream: "Stream A — Platform"
+    architecture_refs:
+      - "deployment.md: Main services"
+      - "runtime-architecture.md: Components"
+      - "Engineering Handoff WP-0003"
+    input_contracts:
+      - "Repository/toolchain contract from WP-0001"
+      - "DEV/DEMO/PAPER/LIVE environment names from deployment.md"
+    dependencies: [M00-WP0001-T02]
+    owned_paths:
+      - "/deploy/compose/**"
+    allowed_paths:
+      - "/scripts/runtime/up.*"
+      - "/scripts/runtime/down.*"
+      - "/tests/integration/runtime/health/**"
+    forbidden_paths:
+      - "/docker-compose.yml"
+      - "/apps/**"
+      - "/migrations/**"
+      - "/.github/workflows/**"
+      - "/pyproject.toml"
+    implementation_scope:
+      - "Pinned service versions, health probes, named synthetic DEV volumes and loopback-only defaults."
+    out_of_scope:
+      - "Application containers, QMT, Live, object encryption or production credentials."
+    expected_outputs:
+      - "Compose core and automated health smoke."
+    acceptance_criteria:
+      - "One command reaches healthy state from empty volumes."
+      - "Second start is idempotent and service versions are stable."
+      - "No Live or real-data path is mounted."
+    required_tests:
+      - "Compose config validation"
+      - "Postgres/Redis/Qdrant health integration smoke"
+    privacy_classification: "P0 synthetic infrastructure"
+    security_classification: "LOCAL_RUNTIME_BASELINE"
+    stub_real_boundary: "Real service processes; Qdrant health-only and no business path."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 3
+    notes:
+      - "Sole owner of Compose core for M00/M01."
+
+  - task_id: M00-WP0003-T02
+    milestone: M00
+    work_package: WP-0003
+    title: "Typed configuration and synthetic/real data separation"
+    goal: "Make environment selection fail closed and keep DEV/DEMO data roots separate from PAPER/LIVE references."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream C — Runtime / Persistence"
+    reviewer_stream: "Stream A — Platform / Security"
+    architecture_refs:
+      - "deployment.md: Environments and Configuration"
+      - "security-privacy.md: Secret"
+      - "ADR-0001"
+    input_contracts:
+      - "Environment keys listed in deployment.md"
+      - "Compose endpoints from M00-WP0003-T01"
+    dependencies: [M00-WP0001-T02, M00-WP0003-T01]
+    owned_paths:
+      - "/config/schemas/**"
+      - "/config/defaults/**"
+      - "/packages/python/wealthpilot/platform/config/**"
+      - "/tests/unit/config/**"
+    allowed_paths:
+      - "/deploy/compose/config/**"
+    forbidden_paths:
+      - "/deploy/compose/compose*.yml"
+      - "/.env"
+      - "/apps/**"
+      - "/migrations/**"
+    implementation_scope:
+      - "Typed non-secret config, Secret Store references and environment/path validation."
+    out_of_scope:
+      - "Real Secret Store adapters, Live credentials or remote access."
+    expected_outputs:
+      - "Typed settings package and safe defaults."
+    acceptance_criteria:
+      - "Missing secret references fail rather than become empty strings."
+      - "DEV/DEMO rejects PAPER/LIVE roots and QMT configuration."
+      - "Default bind addresses are loopback-only."
+    required_tests:
+      - "configuration matrix tests"
+      - "cross-environment path rejection tests"
+    privacy_classification: "P0 configuration metadata; no secret values"
+    security_classification: "FAIL_CLOSED_CONFIGURATION"
+    stub_real_boundary: "Real validation; secret provider remains a port/fake."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 4
+    notes:
+      - "Does not resolve later PAPER/LIVE isolation Architecture Issues."
+
+  - task_id: M00-WP0003-T03
+    milestone: M00
+    work_package: WP-0003
+    title: "Alembic base and migration ownership convention"
+    goal: "Create one repeatable Alembic revision graph and enforce owning-context names without domain tables."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream C — Runtime / Persistence / migration coordinator"
+    reviewer_stream: "Stream A — Platform"
+    architecture_refs:
+      - "data-architecture.md: Version and immutability"
+      - "Engineering Handoff §7 Database migration"
+    input_contracts:
+      - "PostgreSQL 16 runtime from M00-WP0003-T01"
+      - "Typed database configuration from M00-WP0003-T02"
+    dependencies: [M00-WP0003-T01, M00-WP0003-T02]
+    owned_paths:
+      - "/migrations/env.py"
+      - "/migrations/script.py.mako"
+      - "/migrations/versions/0000_platform_base.py"
+      - "/alembic.ini"
+      - "/tests/migration/**"
+    allowed_paths:
+      - "/packages/python/wealthpilot/adapters/persistence/metadata.py"
+    forbidden_paths:
+      - "/migrations/versions/*_wealth_*.py"
+      - "/apps/**"
+      - "/packages/python/wealthpilot/contexts/**"
+      - "/pyproject.toml"
+    implementation_scope:
+      - "Empty/base revision, naming rules, single-head check, upgrade/downgrade smoke and no runtime auto-create."
+    out_of_scope:
+      - "Run, event, ledger or wealth tables."
+    expected_outputs:
+      - "Alembic environment and migration checks."
+    acceptance_criteria:
+      - "Empty database upgrades twice safely and returns to the documented base."
+      - "Multiple heads and unowned revision names fail CI."
+    required_tests:
+      - "empty-database migration smoke"
+      - "single-head/naming negative tests"
+    privacy_classification: "P0"
+    security_classification: "DATA_CHANGE_CONTROL"
+    stub_real_boundary: "Real migration machinery; no domain schema."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 5
+    notes:
+      - "Sole owner of migrations/env.py."
+
+  - task_id: M00-WP0003-T04
+    milestone: M00
+    work_package: WP-0003
+    title: "Local runtime repeatability gate"
+    goal: "Certify service startup, migration repeatability and environment isolation as an automated integration gate."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream C — Runtime / Persistence"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "Engineering Handoff WP-0003 acceptance criteria"
+      - "deployment.md: Backup and recovery"
+    input_contracts:
+      - "Compose/config/Alembic outputs from M00-WP0003-T01..T03"
+    dependencies: [M00-WP0003-T01, M00-WP0003-T02, M00-WP0003-T03]
+    owned_paths:
+      - "/tests/integration/runtime/**"
+      - "/scripts/runtime/verify.*"
+    allowed_paths:
+      - "/docs/engineering/runtime-baseline.md"
+    forbidden_paths:
+      - "/deploy/compose/**"
+      - "/migrations/**"
+      - "/apps/**"
+    implementation_scope:
+      - "Fresh-volume, restart and repeated migration verification."
+    out_of_scope:
+      - "Backup certification, business data or app services."
+    expected_outputs:
+      - "Single runtime verification command and evidence report."
+    acceptance_criteria:
+      - "Fresh, restart and second migration runs all pass."
+      - "A planted cross-environment volume/path fails."
+    required_tests:
+      - "runtime integration suite"
+      - "environment isolation negative test"
+    privacy_classification: "P0 synthetic only"
+    security_classification: "LOCAL_RUNTIME_GATE"
+    stub_real_boundary: "Real infrastructure gate; no business workflow."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 6
+    notes:
+      - "Completes WP-0003."
+
+  - task_id: M00-WP0004-T01
+    milestone: M00
+    work_package: WP-0004
+    title: "Root CI quality and secret-scan gates"
+    goal: "Install blocking lint, format, strict type, unit, contract, architecture and secret checks with minimal duplicated configuration."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / root-CI owner"
+    reviewer_stream: "Stream C — Runtime / Persistence"
+    architecture_refs:
+      - "testing-evaluation.md: Test levels"
+      - "Engineering Handoff §7 CI baseline"
+      - "security-privacy.md: Logs and public repository"
+    input_contracts:
+      - "Locked workspaces from WP-0001"
+      - "Contract commands from WP-0002"
+    dependencies: [M00-WP0001-T02, M00-WP0002-T05]
+    owned_paths:
+      - "/.github/workflows/**"
+      - "/.github/pull_request_template.md"
+      - "/.pre-commit-config.yaml"
+      - "/config/quality/**"
+    allowed_paths:
+      - "/scripts/ci/**"
+    forbidden_paths:
+      - "/pyproject.toml"
+      - "/package.json"
+      - "/packages/**"
+      - "/apps/**"
+      - "/deploy/**"
+    implementation_scope:
+      - "PR/local quality matrix, cache-safe frozen install and secret scan."
+    out_of_scope:
+      - "Production deployment or branch protection API mutations."
+    expected_outputs:
+      - "Root CI workflows and locally reproducible commands."
+    acceptance_criteria:
+      - "Each required gate blocks its planted violation."
+      - "CI logs contain no fixture secret value."
+    required_tests:
+      - "workflow syntax validation"
+      - "planted lint/type/contract/secret violations"
+    privacy_classification: "P0; synthetic secret canaries only"
+    security_classification: "PR_BLOCKING_SUPPLY_CHAIN"
+    stub_real_boundary: "Real CI configuration; branch-protection setting documented only."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 7
+    notes:
+      - "Sole owner of root CI configuration."
+
+  - task_id: M00-WP0004-T02
+    milestone: M00
+    work_package: WP-0004
+    title: "Architecture dependency enforcement"
+    goal: "Block forbidden imports, cross-context internals, Agent-to-DB/vendor SDK paths and high-conflict ownership violations."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform"
+    reviewer_stream: "Stream B — Wealth Domain"
+    architecture_refs:
+      - "Engineering Handoff §3 Dependency rules"
+      - "agent-harness.md: Tool permissions"
+      - "ADR-0001 and ADR-0004"
+    input_contracts:
+      - "Repository topology/CODEOWNERS from WP-0001"
+    dependencies: [M00-WP0001-T02]
+    owned_paths:
+      - "/tests/architecture/**"
+      - "/config/architecture/**"
+      - "/scripts/architecture/**"
+    allowed_paths: []
+    forbidden_paths:
+      - "/packages/python/wealthpilot/kernel/**"
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/apps/**"
+      - "/pyproject.toml"
+    implementation_scope:
+      - "Static import/ownership rules and planted violations."
+    out_of_scope:
+      - "Creating modules merely to satisfy the test graph."
+    expected_outputs:
+      - "Executable architecture test suite."
+    acceptance_criteria:
+      - "Planted domain→framework, Agent→DB, business→vendor SDK and cross-context imports fail."
+      - "Current minimal tree passes without exemptions that weaken rules."
+    required_tests:
+      - "architecture positive suite"
+      - "four planted forbidden-import cases"
+    privacy_classification: "P0"
+    security_classification: "ARCHITECTURE_CONFORMANCE"
+    stub_real_boundary: "Real static enforcement; no runtime policy."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 4
+    notes:
+      - "Can merge before CI and is later wired by M00-WP0004-T01."
+
+  - task_id: M00-WP0004-T03
+    milestone: M00
+    work_package: WP-0004
+    title: "Safe observability and deterministic log redaction baseline"
+    goal: "Provide JSON logging, trace/run correlation and fail-closed safe summaries that never record payload bodies by default."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / observability owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "agent-harness.md: Trace"
+      - "security-privacy.md: Data levels and logs"
+      - "ADR-0001"
+    input_contracts:
+      - "Kernel UUID/time/hash types from M00-WP0002-T02"
+      - "P0–P3 classification policy"
+    dependencies: [M00-WP0002-T02, M00-WP0004-T02]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/observability/**"
+      - "/tests/unit/observability/**"
+    allowed_paths:
+      - "/deploy/observability/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/platform/privacy/**"
+      - "/apps/**"
+      - "/.github/workflows/**"
+    implementation_scope:
+      - "Structured safe fields, correlation IDs, deterministic redaction hooks and in-memory test exporter."
+    out_of_scope:
+      - "Full Privacy Gate classification or production dashboards."
+    expected_outputs:
+      - "Safe logging/trace library and leak assertions."
+    acceptance_criteria:
+      - "P2/P3 canaries appear zero times in logs and spans."
+      - "Trace includes run/task/provider IDs, latency and status but no raw prompts/responses."
+    required_tests:
+      - "redaction unit tests"
+      - "in-memory OTel/log leak scan"
+    privacy_classification: "Processes P0–P3 labels; output limited to P0/P1-safe summaries"
+    security_classification: "PRIVACY_OBSERVABILITY_BOUNDARY"
+    stub_real_boundary: "Real safe telemetry API with in-memory exporter; backend dashboards deferred."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 6
+    notes:
+      - "Privacy Gate later owns classification/minimization; this task owns recording behavior."
+
+  - task_id: M00-WP0004-T04
+    milestone: M00
+    work_package: WP-0004
+    title: "M00 conformance certification"
+    goal: "Run all M00 gates from a clean environment and publish machine-readable evidence before M01 producers start."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / integration coordinator"
+    reviewer_stream: "Stream C — Runtime / Persistence"
+    architecture_refs:
+      - "Engineering Handoff §8–§9"
+      - "implementation-roadmap.md Week 1"
+    input_contracts:
+      - "Completed WP-0001..WP-0004 outputs"
+    dependencies:
+      - M00-WP0001-T02
+      - M00-WP0002-T05
+      - M00-WP0003-T04
+      - M00-WP0004-T01
+      - M00-WP0004-T02
+      - M00-WP0004-T03
+    owned_paths:
+      - "/docs/engineering/evidence/m00-conformance.json"
+      - "/scripts/ci/verify-m00.*"
+    allowed_paths:
+      - "/docs/engineering/evidence/README.md"
+    forbidden_paths:
+      - "/packages/**"
+      - "/apps/**"
+      - "/migrations/**"
+      - "/deploy/**"
+      - "/.github/workflows/**"
+    implementation_scope:
+      - "Clean install, baseline, contract, migration, runtime, architecture, secret and privacy-log gates."
+    out_of_scope:
+      - "Fixing failures by changing frozen contracts or weakening thresholds."
+    expected_outputs:
+      - "M00 gate command and evidence manifest with tool/version hashes."
+    acceptance_criteria:
+      - "All M00 required gates pass from a clean environment."
+      - "Evidence references exact architecture/addendum commits and schema hash."
+    required_tests:
+      - "full M00 gate"
+    privacy_classification: "P0 evidence only"
+    security_classification: "MILESTONE_EXIT_GATE"
+    stub_real_boundary: "Real certification of M00 outputs."
+    estimated_effort: "0.5 engineering day"
+    merge_order: 8
+    notes:
+      - "Completes WP-0004 and M00."
+
+  - task_id: M01-WP0101-T01
+    milestone: M01
+    work_package: WP-0101
+    title: "Model Gateway internal port, request policy and router"
+    goal: "Create the sole model-call boundary with internal typed request/response, FAST/STANDARD/DEEP/CRITIC routing and vendor-neutral ports."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Model Gateway owner"
+    reviewer_stream: "Stream B — Wealth Domain"
+    architecture_refs:
+      - "model-gateway.md: Provider, routing and unified request"
+      - "ADR-0001"
+      - "Engineering Handoff WP-0101"
+    input_contracts:
+      - "ModelRequest field set from model-gateway.md (internal M01 contract)"
+      - "Kernel and Error contracts 1.0.0"
+    dependencies: [M00-WP0002-T05, M00-WP0004-T04]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/core/**"
+      - "/packages/python/wealthpilot/platform/model_gateway/ports/**"
+      - "/tests/unit/model_gateway/core/**"
+    allowed_paths:
+      - "/packages/python/wealthpilot/adapters/models/__init__.py"
+    forbidden_paths:
+      - "/apps/**"
+      - "/packages/python/wealthpilot/contexts/**"
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/pyproject.toml"
+      - "/docs/generated/openapi/**"
+    implementation_scope:
+      - "Internal DTOs, provider port, task-tier routing and deadline/budget prechecks."
+    out_of_scope:
+      - "Public health API, vendor SDK imports, HTTP adapters or business semantics."
+    expected_outputs:
+      - "Vendor-neutral gateway core and route decision tests."
+    acceptance_criteria:
+      - "Business/context packages can depend only on the gateway facade, never vendor SDKs."
+      - "Unknown task tier, expired deadline and invalid budget fail before provider invocation."
+    required_tests:
+      - "router/unit tests"
+      - "vendor-SDK boundary architecture test"
+    privacy_classification: "Accepts declared P0–P3; no raw request logging"
+    security_classification: "SOLE_MODEL_EGRESS_BOUNDARY"
+    stub_real_boundary: "Real core/port; providers supplied by fakes until adapter tasks."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 9
+    notes:
+      - "ModelGateway request/response remain internal in M01; do not publish an unapproved public schema."
+
+  - task_id: M01-WP0101-T02
+    milestone: M01
+    work_package: WP-0101
+    title: "Deterministic FakeModelAdapter and provider contract kit"
+    goal: "Provide offline deterministic success, invalid-schema, timeout, 429 and 5xx behavior for development and E2E."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Model Gateway owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "model-gateway.md: Provider and reliability"
+      - "Engineering Handoff §6 stub/real boundary"
+    input_contracts:
+      - "Provider port from M01-WP0101-T01"
+      - "ErrorResponse 1.0.0"
+    dependencies: [M01-WP0101-T01]
+    owned_paths:
+      - "/packages/python/wealthpilot/adapters/models/fake/**"
+      - "/tests/contract/providers/fake/**"
+    allowed_paths:
+      - "/tests/fixtures/providers/fake/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/**"
+      - "/apps/**"
+      - "/pyproject.toml"
+    implementation_scope:
+      - "Seeded responses, schema-controlled classification candidates and injectable faults."
+    out_of_scope:
+      - "Free-text financial advice or authoritative amounts/postings."
+    expected_outputs:
+      - "Fake adapter and reusable provider contract suite."
+    acceptance_criteria:
+      - "Same input/seed returns byte-equivalent structured result."
+      - "Fault modes are selected explicitly and never leak raw canary data."
+    required_tests:
+      - "provider contract suite"
+      - "determinism and fault-mode tests"
+    privacy_classification: "Synthetic P0/P1 only; P2/P3 canaries must be rejected upstream"
+    security_classification: "TEST_PROVIDER_BOUNDARY"
+    stub_real_boundary: "Fake provider is intentionally stubbed; port and contract tests are real."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 10
+    notes:
+      - "Default provider for all automated E2E and DEMO."
+
+  - task_id: M01-WP0101-T03
+    milestone: M01
+    work_package: WP-0101
+    title: "OpenAI-compatible adapter with mock-HTTP conformance"
+    goal: "Implement the approved default provider adapter with timeout, rate-limit and transient-failure mapping, tested without cloud credentials."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Model Gateway owner"
+    reviewer_stream: "Stream A — Platform / Security reviewer"
+    architecture_refs:
+      - "model-gateway.md: OpenAICompatibleAdapter and reliability"
+      - "ADR-0001"
+    input_contracts:
+      - "Provider port and provider contract kit from T01/T02"
+    dependencies: [M01-WP0101-T01, M01-WP0101-T02, M00-WP0003-T02]
+    owned_paths:
+      - "/packages/python/wealthpilot/adapters/models/openai_compatible/**"
+      - "/tests/contract/providers/openai_compatible/**"
+    allowed_paths:
+      - "/tests/fixtures/providers/openai_compatible/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/**"
+      - "/packages/python/wealthpilot/contexts/**"
+      - "/.env"
+      - "/apps/**"
+    implementation_scope:
+      - "HTTP transport, response normalization, error mapping and mocked protocol tests."
+    out_of_scope:
+      - "OpenAI/Anthropic native adapters, real-key CI or provider-specific business logic."
+    expected_outputs:
+      - "OpenAI-compatible adapter passing the shared contract kit."
+    acceptance_criteria:
+      - "429/5xx/timeout are normalized without exposing provider body."
+      - "No API key appears in config objects, logs, fixtures or errors."
+    required_tests:
+      - "mock-HTTP provider contract"
+      - "secret-canary leak test"
+    privacy_classification: "Receives only Privacy-Gate-approved P0/P1/minimized facts"
+    security_classification: "EXTERNAL_NETWORK_ADAPTER"
+    stub_real_boundary: "Real adapter logic against mock HTTP; real cloud smoke is manual/controlled and not a merge gate."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 11
+    notes:
+      - "Vendor SDK, if used, remains confined to this adapter."
+
+  - task_id: M01-WP0101-T04
+    milestone: M01
+    work_package: WP-0101
+    title: "Gateway reliability, schema, cost and safe trace pipeline"
+    goal: "Complete retry/deadline/circuit behavior, structured-output validation, cost accounting and safe observability."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Model Gateway owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "model-gateway.md: Call pipeline and reliability"
+      - "testing-evaluation.md: Harness and Model Gateway"
+    input_contracts:
+      - "Gateway core/adapters from T01..T03"
+      - "ErrorResponse 1.0.0"
+      - "Safe observability API from M00-WP0004-T03"
+    dependencies: [M01-WP0101-T01, M01-WP0101-T02, M01-WP0101-T03, M00-WP0004-T03]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/policy/**"
+      - "/tests/unit/model_gateway/policy/**"
+      - "/tests/fault/model_gateway/**"
+    allowed_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/core/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/apps/**"
+      - "/docs/generated/openapi/**"
+    implementation_scope:
+      - "Bounded repair, retry-with-jitter, deadline, breaker, safe cache key, usage/cost and traces."
+    out_of_scope:
+      - "Public HTTP health schema or business-level fallbacks to free text."
+    expected_outputs:
+      - "Complete internal Model Gateway pipeline and fault evidence."
+    acceptance_criteria:
+      - "Invalid structured output never reaches a consumer and maps to MODEL_STRUCTURED_OUTPUT_INVALID."
+      - "No retry begins after deadline; breaker and retry counts are deterministic under fake clock."
+      - "Provider/model/version/token/cost/latency are visible only as safe metadata."
+      - "A missing Privacy Gate binding fails closed, and no business/composition entry point is enabled before M01-WP0102-T03."
+    required_tests:
+      - "schema repair/failure tests"
+      - "429/5xx/timeout/deadline/circuit fault suite"
+      - "safe-cache-key and trace tests"
+    privacy_classification: "P0–P2 minimized metadata; no P2/P3 raw content persisted"
+    security_classification: "MODEL_EGRESS_POLICY"
+    stub_real_boundary: "Real policy and accounting; automated provider calls remain fake/mock."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 12
+    notes:
+      - "Completes implementable WP-0101 core."
+      - "The adapter pipeline may be contract-tested with synthetic input, but production composition remains disabled until the Privacy Gate integration merges."
+
+  - task_id: M01-WP0101-T05
+    milestone: M01
+    work_package: WP-0101
+    title: "Public Model Gateway health response"
+    goal: "Publish GET /api/v1/model-gateway/health only after its response/error schema is frozen."
+    status: BLOCKED_BY_ARCHITECTURE
+    owner_stream: "Stream D — Product Integration"
+    reviewer_stream: "Stream A — Platform / contracts owner"
+    architecture_refs:
+      - "api-contracts.md: GET /model-gateway/health"
+      - "Walking Skeleton Contract Addendum 1 §7 Remaining Architecture Issues"
+    input_contracts:
+      - "MISSING: frozen public Model Gateway health response schema/version"
+    dependencies: [M01-WP0101-T04, M01-WP0104-T06]
+    owned_paths:
+      - "/apps/api/routes/model_gateway_health.py"
+      - "/tests/contract/api/model_gateway_health/**"
+    allowed_paths:
+      - "/tests/snapshots/api/model_gateway_health/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/packages/python/wealthpilot/platform/model_gateway/**"
+      - "/docs/generated/openapi/**"
+      - "wealthpilot-arch/**"
+    implementation_scope:
+      - "Endpoint projection against an Architect-approved schema."
+    out_of_scope:
+      - "Inventing provider status, cost fields, enums, cache metrics or error semantics."
+    expected_outputs:
+      - "Contract-tested health endpoint after an additive Architecture contract is accepted."
+    acceptance_criteria:
+      - "Blocked until an immutable architecture commit and schema version define the response."
+      - "After unblock, generated OpenAPI exactly matches the approved schema."
+    required_tests:
+      - "API contract and OpenAPI snapshot tests after unblock"
+    privacy_classification: "Must be P0 operational metadata only"
+    security_classification: "PUBLIC_OPERATIONAL_SURFACE"
+    stub_real_boundary: "No implementation authorized before contract freeze."
+    estimated_effort: "0.5 engineering day after unblock"
+    merge_order: 34
+    notes:
+      - "Not on the Walking Skeleton critical path."
+      - "Developer must not infer a response body from internal gateway types."
+      - "After Architecture unblocks the response contract, the same Stream D API owner modifies this path only after M01-WP0104-T06 has merged."
+
+  - task_id: M01-WP0102-T01
+    milestone: M01
+    work_package: WP-0102
+    title: "Privacy classification, minimization and decision core"
+    goal: "Implement deterministic P0–P3 policy evaluation and the fail-closed decision used before every model call."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Privacy owner"
+    reviewer_stream: "Stream B — Wealth Domain"
+    architecture_refs:
+      - "security-privacy.md: Data levels and local redaction"
+      - "model-gateway.md: Privacy"
+      - "ADR-0001"
+    input_contracts:
+      - "P0–P3 closed policy from security-privacy.md"
+      - "PRIVACY_REDACTION_FAILED ErrorResponse 1.0.0"
+    dependencies: [M00-WP0002-T05, M00-WP0004-T03, M00-WP0004-T04]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/privacy/core/**"
+      - "/tests/unit/privacy/core/**"
+    allowed_paths:
+      - "/config/defaults/privacy/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/**"
+      - "/packages/python/wealthpilot/contexts/**"
+      - "/apps/**"
+      - "/packages/python/wealthpilot/contracts/**"
+    implementation_scope:
+      - "Classification labels, purpose/minimum-fact policy, P3 deny and typed safe decision."
+    out_of_scope:
+      - "LLM-based classification, business categories or cloud calls."
+    expected_outputs:
+      - "Deterministic PrivacyDecision API and unit suite."
+    acceptance_criteria:
+      - "P3 always denies; P2 raw text never receives ALLOW_RAW."
+      - "Unknown classification fails closed with no gateway invocation."
+    required_tests:
+      - "P0–P3 decision matrix"
+      - "unknown/ambiguous fail-closed tests"
+    privacy_classification: "Policy engine processes P0–P3 labels"
+    security_classification: "PRIVACY_GATE"
+    stub_real_boundary: "Real policy engine; extraction/redaction follows in T02."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 9
+    notes:
+      - "No public PrivacyDecision schema is published."
+
+  - task_id: M01-WP0102-T02
+    milestone: M01
+    work_package: WP-0102
+    title: "Deterministic P2 detector, aliases and minimizer"
+    goal: "Detect the M01 account/name/card/unique-ID fixture classes, replace them with task-local aliases and emit only classification facts needed by the model."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Privacy owner"
+    reviewer_stream: "Stream B — Wealth Domain"
+    architecture_refs:
+      - "security-privacy.md: Local redaction"
+      - "Walking Skeleton Contract Addendum 1 §3.3 ImportPreviewItem"
+    input_contracts:
+      - "PrivacyDecision from T01"
+      - "Walking Skeleton synthetic privacy fixtures"
+    dependencies: [M01-WP0102-T01, M01-WP0104-T01]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/privacy/redaction/**"
+      - "/tests/security/privacy/redaction/**"
+    allowed_paths:
+      - "/tests/fixtures/security/privacy/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/**"
+      - "/packages/python/wealthpilot/contexts/wealth/**"
+      - "/apps/**"
+    implementation_scope:
+      - "Deterministic recognizers, task-local aliases, minimum fact projection and fail-closed outcome."
+    out_of_scope:
+      - "General NLP PII system, real user data or category authority."
+    expected_outputs:
+      - "M01 minimizer/redactor and leak-test corpus."
+    acceptance_criteria:
+      - "Name/account/card/address/unique-ID canaries occur zero times in minimized payload and logs."
+      - "Unredactable required text maps to PRIVACY_REDACTION_FAILED."
+    required_tests:
+      - "privacy canary corpus"
+      - "alias scope/determinism tests"
+      - "log and outbound payload leak scan"
+    privacy_classification: "Consumes local P2; outputs P1 task-local facts; P3 always denied"
+    security_classification: "SENSITIVE_DATA_MINIMIZATION"
+    stub_real_boundary: "Real deterministic M01 detectors; broader PII coverage deferred."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 10
+    notes:
+      - "Description remains P2 in local ImportPreview and is never sent raw."
+
+  - task_id: M01-WP0102-T03
+    milestone: M01
+    work_package: WP-0102
+    title: "Privacy Gate integration and zero-leak certification"
+    goal: "Make Privacy Gate mandatory in the Model Gateway call chain and certify P2/P3 request/log leakage is zero."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Privacy owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "model-gateway.md: Call pipeline"
+      - "testing-evaluation.md: P2/P3 leakage zero"
+      - "Engineering Handoff WP-0102"
+    input_contracts:
+      - "Gateway policy T04"
+      - "Privacy core/redactor T01/T02"
+      - "Safe observability M00-WP0004-T03"
+    dependencies: [M01-WP0101-T04, M01-WP0102-T01, M01-WP0102-T02]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/privacy/integration/**"
+      - "/tests/security/privacy/gateway/**"
+    allowed_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/core/**"
+      - "/tests/fault/model_gateway/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/apps/**"
+      - "/packages/python/wealthpilot/contexts/**"
+    implementation_scope:
+      - "Mandatory pre-provider hook, safe audit summary and negative certification."
+    out_of_scope:
+      - "Optional bypasses or provider-side privacy claims."
+    expected_outputs:
+      - "Integrated Privacy Gate and machine-readable leak report."
+    acceptance_criteria:
+      - "No provider call occurs on P3 or failed minimization."
+      - "P2/P3 canary count is zero across adapter capture, logs, traces and errors."
+    required_tests:
+      - "gateway/privacy integration tests"
+      - "P2/P3 end-to-boundary leak certification"
+    privacy_classification: "P0–P3 enforcement"
+    security_classification: "MANDATORY_MODEL_EGRESS_GATE"
+    stub_real_boundary: "Real gateway integration; providers remain fake/mock in CI."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 13
+    notes:
+      - "Completes WP-0102."
+
+  - task_id: M01-WP0103-T01
+    milestone: M01
+    work_package: WP-0103
+    title: "Harness registry and Run/Task state machine"
+    goal: "Implement the frozen RunState, TaskState, progress and closed transition semantics with typed Agent/Tool/Artifact registration."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Harness owner"
+    reviewer_stream: "Stream D — Product Integration"
+    architecture_refs:
+      - "agent-harness.md"
+      - "Walking Skeleton Contract Addendum 1 §3.4"
+      - "ADR-0004"
+    input_contracts:
+      - "RunState/TaskState/RunProgress 1.0.0"
+      - "ArtifactReference and ErrorResponse 1.0.0"
+    dependencies: [M00-WP0002-T05, M00-WP0004-T04]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/harness/registry/**"
+      - "/packages/python/wealthpilot/platform/harness/state/**"
+      - "/tests/unit/harness/state/**"
+    allowed_paths:
+      - "/packages/python/wealthpilot/platform/harness/__init__.py"
+    forbidden_paths:
+      - "/apps/**"
+      - "/migrations/**"
+      - "/packages/python/wealthpilot/contexts/**"
+      - "/packages/python/wealthpilot/contracts/**"
+    implementation_scope:
+      - "Registry declarations, transition table, progress monotonicity and terminal-state protection."
+    out_of_scope:
+      - "Persistence, Celery, LangGraph workflow or wealth tasks."
+    expected_outputs:
+      - "Pure Harness state/registry core."
+    acceptance_criteria:
+      - "Every allowed transition succeeds and every disallowed transition returns HARNESS_INVALID_STATE_TRANSITION."
+      - "Percent never decreases and only COMPLETED reaches 100."
+    required_tests:
+      - "exhaustive state transition table"
+      - "progress property tests"
+      - "registry schema tests"
+    privacy_classification: "P0 control metadata; Artifact bodies excluded"
+    security_classification: "WORKFLOW_CONTROL_PLANE"
+    stub_real_boundary: "Real pure state semantics; adapters absent."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 9
+    notes:
+      - "TaskType is the closed five-value M01 enum."
+
+  - task_id: M01-WP0103-T02
+    milestone: M01
+    work_package: WP-0103
+    title: "Run, Task, Artifact, event, checkpoint and idempotency persistence"
+    goal: "Create platform-owned tables and repositories supporting atomic checkpoint/artifact/outbox boundaries."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream C — Runtime / Persistence / migration coordinator"
+    reviewer_stream: "Stream A — Platform / Harness owner"
+    architecture_refs:
+      - "runtime-architecture.md: Recovery semantics"
+      - "data-architecture.md: Agent, Trace and version"
+      - "Walking Skeleton Contract Addendum 1 §2.3, §3.4, §4"
+    input_contracts:
+      - "Harness state types from T01"
+      - "Event/Artifact/Checkpoint contracts 1.0.0"
+      - "Alembic base from M00-WP0003-T03"
+    dependencies: [M01-WP0103-T01, M00-WP0003-T04]
+    owned_paths:
+      - "/packages/python/wealthpilot/adapters/persistence/harness/**"
+      - "/migrations/versions/0100_platform_harness.py"
+      - "/tests/integration/persistence/harness/**"
+    allowed_paths:
+      - "/packages/python/wealthpilot/platform/harness/ports/**"
+    forbidden_paths:
+      - "/migrations/env.py"
+      - "/packages/python/wealthpilot/platform/harness/state/**"
+      - "/packages/python/wealthpilot/contexts/wealth/**"
+      - "/apps/**"
+    implementation_scope:
+      - "SQL persistence ports/adapters, append-only events, unique idempotency fingerprints and atomic transaction tests."
+    out_of_scope:
+      - "Ledger/wealth tables, SSE transport or workflow policy."
+    expected_outputs:
+      - "Platform migration, repositories and transactional integration tests."
+    acceptance_criteria:
+      - "Artifact/checkpoint/outbox commit atomically; injected rollback leaves none."
+      - "Event sequence is unique/continuous per run and append-only."
+      - "Same idempotency key/fingerprint resolves the same logical result; different fingerprint conflicts."
+    required_tests:
+      - "PostgreSQL transaction/rollback tests"
+      - "event sequence concurrency test"
+      - "idempotency conflict tests"
+      - "migration upgrade/downgrade smoke"
+    privacy_classification: "P0 control metadata plus immutable references; no P2 bodies in events"
+    security_classification: "DURABLE_CONTROL_PLANE"
+    stub_real_boundary: "Real PostgreSQL persistence; domain persistence deferred."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 14
+    notes:
+      - "Migration coordinator owns the revision; Harness owner reviews semantics."
+
+  - task_id: M01-WP0103-T03
+    milestone: M01
+    work_package: WP-0103
+    title: "Budget, permission, timeout and failure policy"
+    goal: "Enforce step/token/CNY/deadline budgets and READ/COMPUTE/WRITE_REVERSIBLE/WRITE_SENSITIVE permissions before task/tool execution."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Harness owner"
+    reviewer_stream: "Stream A — Platform / Security reviewer"
+    architecture_refs:
+      - "agent-harness.md: Agent declaration and Tool permissions"
+      - "Engineering Handoff Agent Feature DoD"
+    input_contracts:
+      - "Harness registry/state T01"
+      - "Gateway usage/cost metadata T04"
+    dependencies: [M01-WP0103-T01, M01-WP0101-T04, M01-WP0102-T03]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/harness/policy/**"
+      - "/tests/unit/harness/policy/**"
+    allowed_paths: []
+    forbidden_paths:
+      - "/packages/python/wealthpilot/platform/model_gateway/**"
+      - "/packages/python/wealthpilot/platform/privacy/**"
+      - "/apps/**"
+      - "/migrations/**"
+    implementation_scope:
+      - "Pre-execution policy, bounded retries/timeouts and explicit failure outcomes."
+    out_of_scope:
+      - "Trading permissions, compensation implementation or domain tools."
+    expected_outputs:
+      - "Harness execution policy and decision tests."
+    acceptance_criteria:
+      - "Over-budget, expired or unauthorized task performs zero tool/provider calls."
+      - "WRITE_SENSITIVE is denied for the M01 import agent."
+    required_tests:
+      - "budget/deadline matrix"
+      - "permission negative tests"
+      - "retry exhaustion tests"
+    privacy_classification: "P0 policy metadata"
+    security_classification: "TOOL_EXECUTION_GATE"
+    stub_real_boundary: "Real policies; only fake tools used in unit tests."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 15
+    notes:
+      - "No Live or Broker permission exists in M01."
+
+  - task_id: M01-WP0103-T04
+    milestone: M01
+    work_package: WP-0103
+    title: "Checkpoint, resume, replay and side-effect idempotency coordinator"
+    goal: "Resume from the latest committed checkpoint without repeating committed postings, artifacts or events."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream A — Platform / Harness owner"
+    reviewer_stream: "Stream C — Runtime / Persistence"
+    architecture_refs:
+      - "runtime-architecture.md: Recovery semantics"
+      - "Walking Skeleton Contract Addendum 1 §3.4"
+      - "ADR-0004"
+    input_contracts:
+      - "CheckpointSummary/FailureState 1.0.0"
+      - "Harness persistence T02 and policy T03"
+    dependencies: [M01-WP0103-T02, M01-WP0103-T03]
+    owned_paths:
+      - "/packages/python/wealthpilot/platform/harness/execution/**"
+      - "/tests/integration/harness/resume/**"
+    allowed_paths:
+      - "/packages/python/wealthpilot/platform/harness/ports/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/adapters/persistence/**"
+      - "/packages/python/wealthpilot/contexts/**"
+      - "/apps/**"
+      - "/migrations/**"
+    implementation_scope:
+      - "Checkpoint coordinator, attempt increments, pure-node replay and side-effect fencing."
+    out_of_scope:
+      - "Celery dispatch or wealth-specific workflow graph."
+    expected_outputs:
+      - "Recoverable execution coordinator and crash-boundary tests."
+    acceptance_criteria:
+      - "Injected crash after committed boundary resumes with same run/task and incremented attempt."
+      - "Committed event/artifact side effects are never duplicated."
+      - "Missing unsafe checkpoint returns HARNESS_CHECKPOINT_UNAVAILABLE."
+    required_tests:
+      - "crash-at-each-boundary integration matrix"
+      - "replay/idempotency tests"
+    privacy_classification: "P0 control metadata; checkpoint blobs remain internal/local"
+    security_classification: "RECOVERY_AND_SIDE_EFFECT_SAFETY"
+    stub_real_boundary: "Real coordinator against PostgreSQL; domain nodes are fakes."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 16
+    notes:
+      - "Checkpoint public projection exposes summary only."
+
+  - task_id: M01-WP0103-T05
+    milestone: M01
+    work_package: WP-0103
+    title: "Celery worker composition and Harness fault certification"
+    goal: "Wire Redis/Celery to the Harness facade and certify timeout, restart, budget and duplicate-delivery safety."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream C — Runtime / Persistence"
+    reviewer_stream: "Stream A — Platform / Harness owner"
+    architecture_refs:
+      - "runtime-architecture.md: Celery Worker"
+      - "testing-evaluation.md: Harness and Model Gateway"
+      - "Engineering Handoff WP-0103"
+    input_contracts:
+      - "Harness coordinator T04"
+      - "Compose Redis/runtime WP-0003"
+    dependencies: [M01-WP0103-T04, M00-WP0003-T04]
+    owned_paths:
+      - "/apps/worker/**"
+      - "/packages/python/wealthpilot/adapters/messaging/celery/**"
+      - "/tests/fault/harness/**"
+    allowed_paths:
+      - "/deploy/compose/services/worker.yml"
+    forbidden_paths:
+      - "/deploy/compose/compose*.yml"
+      - "/apps/api/**"
+      - "/packages/python/wealthpilot/platform/harness/**"
+      - "/packages/python/wealthpilot/contexts/**"
+    implementation_scope:
+      - "Thin composition root, task envelope, at-least-once delivery and worker restart tests."
+    out_of_scope:
+      - "Wealth workflow nodes, scheduler or Web/API."
+    expected_outputs:
+      - "Worker runtime and Harness fault report."
+    acceptance_criteria:
+      - "Duplicate delivery invokes one logical side effect."
+      - "Worker restart resumes from the last durable checkpoint."
+      - "Worker imports no vendor model SDK and no context repository directly."
+    required_tests:
+      - "Celery/Redis integration"
+      - "duplicate-delivery/restart fault tests"
+      - "worker architecture tests"
+    privacy_classification: "P0 control envelopes; Artifact bodies remain local"
+    security_classification: "ASYNC_RUNTIME_BOUNDARY"
+    stub_real_boundary: "Real Celery/Redis/worker; task nodes fake until WP-0104."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 17
+    notes:
+      - "Completes WP-0103 core."
+
+  - task_id: M01-WP0104-T01
+    milestone: M01
+    work_package: WP-0104
+    title: "Synthetic bank CSV, privacy canaries and deterministic oracle"
+    goal: "Freeze a wholly synthetic M01 input dataset and expected preview, balanced posting totals and FinancialSnapshot results before producers are implemented."
+    status: READY
+    owner_stream: "Stream B — Wealth Domain / fixture producer"
+    reviewer_stream: "Stream A — Platform / contracts owner"
+    architecture_refs:
+      - "Engineering Handoff §6 Walking Skeleton"
+      - "Walking Skeleton Contract Addendum 1 §1, §3.3, §3.5"
+      - "wealth-management.md: Import flow and double-entry ledger"
+      - "ADR-0002"
+    input_contracts:
+      - "ImportRequest/ImportPreview/FinancialSnapshot 1.0.0"
+      - "M01 scope: one internal GENERIC_BANK_CSV parser format"
+    dependencies: []
+    owned_paths:
+      - "/tests/fixtures/synthetic/walking_skeleton/bank/**"
+      - "/tests/fixtures/synthetic/walking_skeleton/oracle/**"
+      - "/tests/fixtures/security/privacy/walking_skeleton/**"
+    allowed_paths:
+      - "/tests/fixtures/synthetic/walking_skeleton/README.md"
+    forbidden_paths:
+      - "/packages/**"
+      - "/apps/**"
+      - "/migrations/**"
+      - "/docs/contracts/**"
+      - "/docs/generated/openapi/**"
+      - "wealthpilot-arch/**"
+    implementation_scope:
+      - "Document one internal CSV column layout, row semantics, P2/P3 canaries and expected contract-level outputs."
+      - "Include ambiguous merchant rows, inflow/outflow, rule-classified rows and duplicate-file hash."
+    out_of_scope:
+      - "Claiming generic real-bank compatibility, defining public CSV schema, parser code or full M02 transfer/refund logic."
+    expected_outputs:
+      - "Synthetic CSV, canary variant, expected ImportPreview summary and FinancialSnapshot oracle."
+    acceptance_criteria:
+      - "All identifiers and financial facts are demonstrably synthetic."
+      - "Oracle totals reconcile exactly in Decimal/CNY and define a balanced debit/credit total."
+      - "Expected public payloads validate against contract fixture definitions without adding fields."
+    required_tests:
+      - "fixture hash/determinism check"
+      - "JSON Schema validation of expected public payloads"
+      - "oracle arithmetic check"
+    privacy_classification: "Synthetic P2/P3 canaries; no real personal data"
+    security_classification: "TEST_DATA_AND_PRIVACY_GATE"
+    stub_real_boundary: "Real frozen fixtures/oracle; CSV format is explicitly an internal M01 test format, not a public contract."
+    estimated_effort: "1.0 engineering day"
+    merge_order: 1
+    notes:
+      - "Independent producer-first fixture task; Developer may choose fixture column names but may not alter public schema or domain invariants."
+
+  - task_id: M01-WP0104-T02
+    milestone: M01
+    work_package: WP-0104
+    title: "Synthetic CSV parser and rule-first classification producer"
+    goal: "Parse exactly the frozen synthetic CSV format into internal normalized rows and produce deterministic rule classifications before model candidates."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream B — Wealth Domain"
+    reviewer_stream: "Stream A — Platform / Privacy"
+    architecture_refs:
+      - "wealth-management.md: Import flow"
+      - "Walking Skeleton Contract Addendum 1 §3.3"
+      - "Engineering Handoff §6 stub/real boundary"
+    input_contracts:
+      - "Synthetic CSV/oracle M01-WP0104-T01"
+      - "ImportPreviewItem 1.0.0"
+      - "Kernel Money/UTC/hash from M00-WP0002-T02"
+      - "Frozen Addendum §5 mappings: VALIDATION_FILE_EMPTY, VALIDATION_FILE_TYPE_UNSUPPORTED and VALIDATION_REQUEST_INVALID"
+    dependencies: [M01-WP0104-T01, M00-WP0002-T02, M00-WP0002-T03, M00-WP0004-T04]
+    owned_paths:
+      - "/packages/python/wealthpilot/contexts/wealth/application/imports/parser/**"
+      - "/packages/python/wealthpilot/contexts/wealth/application/imports/classification_rules/**"
+      - "/packages/python/wealthpilot/contexts/wealth/ports/import_parser.py"
+      - "/tests/unit/wealth/imports/**"
+    allowed_paths:
+      - "/tests/contract/wealth/parser/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/platform/**"
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/packages/python/wealthpilot/adapters/persistence/**"
+      - "/apps/**"
+      - "/migrations/**"
+    implementation_scope:
+      - "CSV validation, stable row IDs, UTC conversion, positive Money/direction and rule-first category candidates."
+      - "Map an empty byte stream to 422/VALIDATION_FILE_EMPTY and an unsupported file type to 422/VALIDATION_FILE_TYPE_UNSUPPORTED."
+      - "Use 400/VALIDATION_REQUEST_INVALID only for Addendum-covered JSON, field, enum, UTC or Money contract violations."
+      - "Represent encoding, bounds or malformed CSV failures not covered by Addendum §5 as internal parser failures with no new public error mapping."
+      - "The framework-free parser emits the approved error classification; T06 alone owns its HTTP projection."
+    out_of_scope:
+      - "Alipay/WeChat/credit-card/QMT parsers, transfer/refund/installment detection or model calls."
+      - "Creating a public error code or extending VALIDATION_REQUEST_INVALID to encoding, bounds or malformed CSV semantics not frozen by Addendum §5."
+    expected_outputs:
+      - "Framework-free parser port/implementation and normalized-row tests."
+    acceptance_criteria:
+      - "Frozen fixture rows parse deterministically and reconcile to oracle totals."
+      - "Empty file maps exactly to HTTP 422 / VALIDATION_FILE_EMPTY."
+      - "Unsupported file type maps exactly to HTTP 422 / VALIDATION_FILE_TYPE_UNSUPPORTED."
+      - "Addendum-covered field, enum, UTC and Money violations map exactly to HTTP 400 / VALIDATION_REQUEST_INVALID."
+      - "Encoding, bounds and malformed CSV cases not covered by Addendum §5 remain typed internal parser failures; this task and T06 publish no inferred public mapping for them."
+      - "Raw descriptions stay local and are never logged."
+    required_tests:
+      - "parser golden tests"
+      - "empty_file_emits_validation_file_empty_for_422_projection"
+      - "unsupported_type_emits_validation_file_type_unsupported_for_422_projection"
+      - "covered_contract_violation_emits_validation_request_invalid_for_400_projection"
+      - "malformed_encoding_bounds_remain_internal_failure"
+      - "stable row-ID property test"
+    privacy_classification: "Local P2 descriptions; no external transfer"
+    security_classification: "UNTRUSTED_FILE_INPUT"
+    stub_real_boundary: "Real parser for exactly one synthetic schema; all other sources excluded."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 18
+    notes:
+      - "Internal normalized DTO is refinable but must map losslessly to the frozen preview fields."
+
+  - task_id: M01-WP0104-T03
+    milestone: M01
+    work_package: WP-0104
+    title: "Minimal double-entry commit and FinancialSnapshot calculator"
+    goal: "Implement the smallest real deterministic ledger path needed to commit an eligible preview and build the frozen FinancialSnapshot."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream B — Wealth Domain / ledger owner"
+    reviewer_stream: "Stream C — Runtime / Persistence"
+    architecture_refs:
+      - "wealth-management.md: Double-entry and deterministic calculations"
+      - "Walking Skeleton Contract Addendum 1 §2.3, §3.5"
+      - "ADR-0002"
+    input_contracts:
+      - "ImportPreview/ImportCommitCommand/FinancialSnapshot 1.0.0"
+      - "Synthetic oracle M01-WP0104-T01"
+      - "Kernel Money/UTC/hash"
+    dependencies: [M01-WP0104-T01, M00-WP0002-T02, M00-WP0002-T03, M00-WP0004-T04]
+    owned_paths:
+      - "/packages/python/wealthpilot/contexts/wealth/domain/ledger/**"
+      - "/packages/python/wealthpilot/contexts/wealth/domain/snapshot/**"
+      - "/packages/python/wealthpilot/contexts/wealth/ports/ledger_repository.py"
+      - "/tests/unit/wealth/ledger/**"
+      - "/tests/property/wealth/ledger/**"
+    allowed_paths:
+      - "/tests/unit/wealth/snapshot/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/adapters/**"
+      - "/packages/python/wealthpilot/platform/**"
+      - "/apps/**"
+      - "/migrations/**"
+      - "/packages/python/wealthpilot/contracts/**"
+    implementation_scope:
+      - "Internal JournalEntry/Posting invariant, one synthetic account/counter-account mapping, immutable commit result and net-worth calculation."
+    out_of_scope:
+      - "Full M02 public ledger schema, reversal, transfer/refund/installment, reconciliation UI, budgets/goals or multi-currency."
+    expected_outputs:
+      - "Pure ledger/snapshot domain and deterministic tests."
+    acceptance_criteria:
+      - "Every committed JournalEntry balances exactly; unbalanced construction is impossible/rejected."
+      - "Unconfirmed/ineligible preview produces zero financial effect."
+      - "Snapshot totals, formula, source references and posting_count match the frozen oracle 100%."
+    required_tests:
+      - "Golden ledger/snapshot tests"
+      - "property-based balance invariant"
+      - "unconfirmed-preview negative test"
+      - "Decimal/no-float architecture test"
+    privacy_classification: "Local P2 financial facts; public output remains local application data"
+    security_classification: "DETERMINISTIC_FINANCIAL_INVARIANT"
+    stub_real_boundary: "Real minimal ledger and snapshot; broader M02 semantics excluded."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 18
+    notes:
+      - "Sole M00/M01 owner of wealth ledger domain."
+
+  - task_id: M01-WP0104-T04
+    milestone: M01
+    work_package: WP-0104
+    title: "Wealth import, ledger and snapshot SQL persistence"
+    goal: "Persist immutable ImportIntent/Preview, minimal ledger, snapshot and source-file hashes with atomic outbox boundaries."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream C — Runtime / Persistence / migration coordinator"
+    reviewer_stream: "Stream B — Wealth Domain / ledger owner"
+    architecture_refs:
+      - "Walking Skeleton Contract Addendum 1 §2.3–§2.4"
+      - "data-architecture.md: Personal wealth and immutability"
+      - "ADR-0002"
+    input_contracts:
+      - "Wealth domain ports from M01-WP0104-T03"
+      - "Harness persistence/outbox from M01-WP0103-T02"
+      - "Artifact/Import/Snapshot 1.0.0"
+    dependencies: [M01-WP0103-T02, M01-WP0104-T03]
+    owned_paths:
+      - "/packages/python/wealthpilot/adapters/persistence/wealth/**"
+      - "/migrations/versions/0101_wealth_walking_skeleton.py"
+      - "/tests/integration/persistence/wealth/**"
+    allowed_paths:
+      - "/packages/python/wealthpilot/contexts/wealth/ports/**"
+    forbidden_paths:
+      - "/migrations/env.py"
+      - "/packages/python/wealthpilot/contexts/wealth/domain/**"
+      - "/apps/**"
+      - "/packages/python/wealthpilot/contracts/**"
+    implementation_scope:
+      - "SQL mappings, uniqueness/immutability constraints and atomic ledger+checkpoint+outbox transaction."
+    out_of_scope:
+      - "Full M02 account/reconciliation schema, object encryption or cross-context joins."
+    expected_outputs:
+      - "Wealth migration/repositories and round-trip/rollback tests."
+    acceptance_criteria:
+      - "Commit atomically writes balanced ledger, import state, idempotency record, checkpoint and outbox; rollback writes none."
+      - "Preview/snapshot/event rows cannot be mutated through repository APIs."
+      - "Duplicate file identity creates zero additional Posting."
+    required_tests:
+      - "PostgreSQL mapping round-trip"
+      - "atomic rollback/fault tests"
+      - "duplicate file/idempotency concurrency tests"
+      - "migration smoke"
+    privacy_classification: "Local P2 data; no raw body in outbox/event"
+    security_classification: "FINANCIAL_PERSISTENCE_BOUNDARY"
+    stub_real_boundary: "Real PostgreSQL persistence for the M01 slice only."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 19
+    notes:
+      - "Migration coordinator owns revision; Wealth owner approves mapping semantics."
+
+  - task_id: M01-WP0104-T05
+    milestone: M01
+    work_package: WP-0104
+    title: "Import-to-snapshot application workflow through Harness, Privacy and Gateway"
+    goal: "Produce ImportPreview, wait for exact user confirmation, then commit ledger and FinancialSnapshot through the approved five-task Run."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream B — Wealth Domain / workflow producer"
+    reviewer_stream: "Stream A — Platform / Harness owner"
+    architecture_refs:
+      - "Engineering Handoff §6 Vertical flow"
+      - "Walking Skeleton Contract Addendum 1 §2–§4"
+      - "agent-harness.md: Execution semantics"
+    input_contracts:
+      - "Import/Run/Event/Error/FinancialSnapshot 1.0.0"
+      - "Parser/ledger/persistence T02..T04"
+      - "Gateway/Privacy/Harness outputs WP-0101..0103"
+    dependencies:
+      - M01-WP0101-T04
+      - M01-WP0102-T03
+      - M01-WP0103-T05
+      - M01-WP0104-T02
+      - M01-WP0104-T03
+      - M01-WP0104-T04
+    owned_paths:
+      - "/packages/python/wealthpilot/contexts/wealth/application/imports/workflow/**"
+      - "/packages/python/wealthpilot/contexts/wealth/agents/account_steward/**"
+      - "/tests/integration/wealth/import_workflow/**"
+    allowed_paths:
+      - "/apps/worker/tasks/wealth_import.py"
+      - "/packages/python/wealthpilot/contexts/wealth/ports/**"
+    forbidden_paths:
+      - "/apps/api/**"
+      - "/apps/web/**"
+      - "/packages/python/wealthpilot/platform/**"
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/migrations/**"
+    implementation_scope:
+      - "Parse→rules→privacy-minimized model candidate→preview/checkpoint→wait→exact commit→snapshot."
+    out_of_scope:
+      - "Free-text advice, authoritative model numbers, full parser family, cancellation or M02 reconciliation."
+    expected_outputs:
+      - "Application facade and worker node registrations producing frozen contracts."
+    acceptance_criteria:
+      - "Model receives only row_id plus minimized alias/facts and returns typed category candidates."
+      - "Preview is immutable, version/hash checked, and WAITING_FOR_INPUT has zero financial effect."
+      - "run.completed occurs only after snapshot persistence; failure uses approved codes/checkpoint."
+    required_tests:
+      - "workflow integration happy/wait/commit tests"
+      - "invalid model schema and privacy rejection tests"
+      - "event order assertion"
+    privacy_classification: "Local P2 input; P1 minimized model payload; P3 denied"
+    security_classification: "VERTICAL_WORKFLOW_CONTROL"
+    stub_real_boundary: "Real workflow/Harness/Privacy/Gateway facade; model provider fake."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 20
+    notes:
+      - "Producer must merge before API/SSE/Web consumers."
+
+  - task_id: M01-WP0104-T06
+    milestone: M01
+    work_package: WP-0104
+    title: "Frozen Walking Skeleton FastAPI operations"
+    goal: "Expose exactly the accepted Import, Run and FinancialSnapshot endpoints as thin application consumers."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream D — Product Integration / API owner"
+    reviewer_stream: "Stream A — Platform / contracts owner"
+    architecture_refs:
+      - "Walking Skeleton Contract Addendum 1 §2.2 and §5"
+      - "api-contracts.md"
+      - "Engineering Handoff §3 apps/api"
+    input_contracts:
+      - "ImportRequest/Accepted/Status/Preview/Commit, RunState, FinancialSnapshot and ErrorResponse 1.0.0"
+      - "Application facade M01-WP0104-T05"
+      - "Generated OpenAPI components M00-WP0002-T04"
+    dependencies: [M01-WP0104-T05, M00-WP0002-T04]
+    owned_paths:
+      - "/apps/api/**"
+      - "/tests/contract/api/walking_skeleton/**"
+    allowed_paths:
+      - "/tests/snapshots/api/runtime-openapi/**"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/packages/python/wealthpilot/contexts/wealth/domain/**"
+      - "/packages/python/wealthpilot/adapters/persistence/**"
+      - "/migrations/**"
+      - "/apps/web/**"
+    implementation_scope:
+      - "Implement exactly six non-SSE operations: POST /api/v1/imports; GET /api/v1/imports/{import_id}; GET /api/v1/imports/{import_id}/preview; POST /api/v1/imports/{import_id}/commit; GET /api/v1/runs/{run_id}; GET /api/v1/wealth/snapshot?as_of=."
+      - "Leave GET /api/v1/runs/{run_id}/events transport exclusively to M01-WP0104-T07."
+      - "Apply multipart validation, 202 timing and only the ErrorResponse mappings explicitly frozen by Addendum §5."
+    out_of_scope:
+      - "Authentication RFC, public model health, cancellation or any M02+ endpoint."
+      - "Any public parser error mapping not explicitly frozen by Addendum §5."
+    expected_outputs:
+      - "Thin FastAPI composition root and runtime OpenAPI conformance evidence against the contract-owner snapshot."
+    acceptance_criteria:
+      - "Request/response bodies and status codes match 1.0.0; unknown fields reject."
+      - "POST /imports returns 202 plus run_id/status/events URLs within 2 seconds under local test SLO."
+      - "Every write requires Idempotency-Key and enforces fingerprint/reuse semantics."
+      - "T06 runtime OpenAPI contains exactly the six listed non-SSE operations and does not register the SSE operation owned by T07."
+      - "Parser failures without an Addendum §5 public mapping are not assigned a new or broadened ErrorResponse code by this API task."
+    required_tests:
+      - "API contract suite"
+      - "six-operation runtime OpenAPI conformance"
+      - "frozen ErrorResponse mapping matrix"
+      - "202/2-second integration SLO"
+      - "idempotency conflict tests"
+    privacy_classification: "Local P2 upload; response/event payload excludes raw P2/P3"
+    security_classification: "LOCAL_HTTP_BOUNDARY"
+    stub_real_boundary: "Real FastAPI routes; loopback/synthetic DEV only, local-session auth deferred by approved issue boundary."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 21
+    notes:
+      - "API may compose ports but must not import ORM entities or recalculate finance."
+
+  - task_id: M01-WP0104-T07
+    milestone: M01
+    work_package: WP-0104
+    title: "SSE replay and Last-Event-ID consumer"
+    goal: "Stream the seven frozen event types with complete replay, live handoff, cursor validation and at-least-once semantics."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream D — Product Integration / API owner"
+    reviewer_stream: "Stream C — Runtime / Persistence"
+    architecture_refs:
+      - "Walking Skeleton Contract Addendum 1 §4"
+      - "event-contracts.md"
+      - "user-experience.md: Long task recovery"
+    input_contracts:
+      - "WalkingSkeletonEvent/EventEnvelope 1.0.0"
+      - "Event store M01-WP0103-T02"
+      - "FastAPI composition M01-WP0104-T06"
+    dependencies: [M01-WP0103-T02, M01-WP0104-T05, M01-WP0104-T06]
+    owned_paths:
+      - "/apps/api/sse/**"
+      - "/tests/contract/sse/**"
+      - "/tests/integration/sse/**"
+    allowed_paths:
+      - "/apps/api/routes/runs.py"
+    forbidden_paths:
+      - "/packages/python/wealthpilot/contracts/**"
+      - "/packages/python/wealthpilot/adapters/persistence/**"
+      - "/apps/web/**"
+      - "/migrations/**"
+    implementation_scope:
+      - "Replay from 1/after cursor, live transition, frame formatting, keepalive comments and invalid cursor mapping."
+    out_of_scope:
+      - "Event producers, retention deletion or new event types."
+    expected_outputs:
+      - "SSE endpoint and replay/gap tests."
+    acceptance_criteria:
+      - "Reconnect after Last-Event-ID sends only later sequences with no server-side cursor duplication."
+      - "Foreign/missing cursor returns SSE_CURSOR_INVALID; sequence gap is detectable."
+      - "Keepalive allocates no event ID or sequence."
+      - "After T07 integration, runtime OpenAPI contains the six T06 non-SSE operations plus exactly one GET /api/v1/runs/{run_id}/events SSE operation."
+    required_tests:
+      - "SSE contract frames"
+      - "disconnect/reconnect integration"
+      - "cursor negative tests"
+      - "replay-to-live race test"
+    privacy_classification: "P0/P1-safe event metadata only"
+    security_classification: "STREAMING_PUBLIC_CONTRACT"
+    stub_real_boundary: "Real PostgreSQL replay and Redis/live path; no retention policy."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 22
+    notes:
+      - "Consumes events; cannot extend producer payload."
+
+  - task_id: M01-WP0104-T08
+    milestone: M01
+    work_package: WP-0104
+    title: "Minimal Web upload, preview, confirmation, snapshot and safe Trace view"
+    goal: "Implement the contract-generated Web consumer for the complete Walking Skeleton without recreating business logic in the UI."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream D — Product Integration / Web owner"
+    reviewer_stream: "Stream B — Wealth Domain"
+    architecture_refs:
+      - "user-experience.md: File import"
+      - "Engineering Handoff §6 Visible result"
+      - "Walking Skeleton Contract Addendum 1 §2 and §4"
+    input_contracts:
+      - "Generated TypeScript client/OpenAPI 1.0.0"
+      - "FastAPI/SSE producers T06/T07"
+    dependencies: [M00-WP0002-T04, M01-WP0104-T06, M01-WP0104-T07]
+    owned_paths:
+      - "/apps/web/**"
+      - "/tests/unit/web/**"
+      - "/tests/e2e/web/**"
+    allowed_paths:
+      - "/packages/typescript/ui/**"
+    forbidden_paths:
+      - "/packages/typescript/api-client/generated/**"
+      - "/apps/api/**"
+      - "/packages/python/**"
+      - "/docs/generated/openapi/**"
+    implementation_scope:
+      - "Upload, event progress, reconnect/dedupe, preview/hash display, confirm, snapshot/formula/source and safe Trace summary."
+    out_of_scope:
+      - "Full dashboard, editing classifications, budget/goal UI or client-side financial calculations."
+    expected_outputs:
+      - "Minimal Next.js page and component/browser tests."
+    acceptance_criteria:
+      - "User sees run ID/monotonic progress and recovers after disconnect."
+      - "Commit submits the exact displayed preview_version/hash and cannot proceed when ineligible."
+      - "Displayed totals come from FinancialSnapshot, never UI recomputation."
+    required_tests:
+      - "component tests with generated types"
+      - "browser upload/preview/confirm/snapshot path"
+      - "SSE dedupe/gap recovery test"
+    privacy_classification: "Local P2 display; no raw P2 in browser console/telemetry"
+    security_classification: "LOCAL_UI_CONSUMER"
+    stub_real_boundary: "Real minimal UI; visual scope intentionally narrow."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 23
+    notes:
+      - "Consumer-only task; contract additions require a separate Architecture change."
+
+  - task_id: M01-WP0104-T09
+    milestone: M01
+    work_package: WP-0104
+    title: "Walking Skeleton happy-path and no-financial-effect E2E"
+    goal: "Prove browser→API→worker→Harness→Privacy→Gateway→Fake Provider→preview→confirm→ledger→snapshot→SSE→Web."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream D — Product Integration / vertical integrator"
+    reviewer_stream: "Stream B — Wealth Domain"
+    architecture_refs:
+      - "Engineering Handoff §6 E2E tests 1 and 8"
+      - "Walking Skeleton Contract Addendum 1 §2.3 and §4.2"
+      - "ADR-0002 and ADR-0004"
+    input_contracts:
+      - "All WP-0104 producers/consumers T01..T08"
+      - "Synthetic oracle T01"
+    dependencies:
+      - M01-WP0104-T05
+      - M01-WP0104-T06
+      - M01-WP0104-T07
+      - M01-WP0104-T08
+    owned_paths:
+      - "/tests/e2e/walking_skeleton/happy_path/**"
+      - "/scripts/demo/walking-skeleton.*"
+    allowed_paths:
+      - "/docs/engineering/evidence/m01-happy-path.json"
+    forbidden_paths:
+      - "/apps/**"
+      - "/packages/**"
+      - "/migrations/**"
+      - "/deploy/compose/**"
+      - "/docs/contracts/**"
+    implementation_scope:
+      - "happy_path_import_to_snapshot and unconfirmed_import_has_no_financial_effect with browser and data assertions."
+    out_of_scope:
+      - "Changing production code inside the E2E task; defects return to owning task/branch."
+    expected_outputs:
+      - "Repeatable browser E2E and evidence report."
+    acceptance_criteria:
+      - "202+run_id and first event occur within 2 seconds."
+      - "Event sequence/order is valid, postings balance 100%, snapshot equals oracle 100%."
+      - "Before confirmation snapshot/ledger counts are unchanged."
+    required_tests:
+      - "happy_path_import_to_snapshot"
+      - "unconfirmed_import_has_no_financial_effect"
+    privacy_classification: "Synthetic only"
+    security_classification: "VERTICAL_ACCEPTANCE_GATE"
+    stub_real_boundary: "All runtime pieces real except deterministic FakeModelAdapter and single synthetic parser."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 24
+    notes:
+      - "First Walking Skeleton integration point."
+
+  - task_id: M01-WP0104-T10
+    milestone: M01
+    work_package: WP-0104
+    title: "Walking Skeleton idempotency, preview and privacy resilience E2E"
+    goal: "Certify duplicate-file, preview-integrity, privacy-boundary and invalid-model-schema behavior before runtime recovery certification."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream D — Product Integration / vertical integrator"
+    reviewer_stream: "Stream A — Platform / Security reviewer"
+    architecture_refs:
+      - "Engineering Handoff §6 E2E tests 2–5 and Success criteria"
+      - "testing-evaluation.md: Harness/Model Gateway"
+      - "Walking Skeleton Contract Addendum 1 §2.3, §3.4, §4, §5"
+      - "Walking Skeleton Contract Addendum 1 §7: preview revision deferred to M02"
+    input_contracts:
+      - "Successful happy-path gate M01-WP0104-T09"
+      - "All M00/M01 contract, runtime, gateway, privacy and harness outputs"
+    dependencies:
+      - M01-WP0104-T09
+      - M01-WP0101-T04
+      - M01-WP0102-T03
+      - M01-WP0103-T05
+    owned_paths:
+      - "/tests/e2e/walking_skeleton/data_privacy_resilience/**"
+      - "/tests/security/walking_skeleton/**"
+      - "/docs/engineering/evidence/m01-data-privacy-resilience.json"
+    allowed_paths:
+      - "/docs/engineering/evidence/README.md"
+    forbidden_paths:
+      - "/apps/**"
+      - "/packages/**"
+      - "/migrations/**"
+      - "/deploy/**"
+      - "/.github/workflows/**"
+      - "/docs/contracts/**"
+    implementation_scope:
+      - "Duplicate file, preview mismatch, privacy boundary and invalid model schema certification."
+    out_of_scope:
+      - "Weakening gates, changing contracts, implementing public health or any M02+ behavior."
+      - "Manual classification recovery, preview revision command, recovery endpoint/event or any other unfrozen manual-input path."
+    expected_outputs:
+      - "Four data/privacy resilience E2Es and machine-readable evidence."
+    acceptance_criteria:
+      - "Duplicate file/key creates zero new Posting and returns the same logical result."
+      - "An old preview_version returns exactly HTTP 409 / IMPORT_PREVIEW_VERSION_MISMATCH and leaves ledger/snapshot unchanged."
+      - "A tampered preview_hash returns exactly HTTP 409 / IMPORT_PREVIEW_HASH_MISMATCH and leaves ledger/snapshot unchanged."
+      - "An empty, conflicted or confirmation-pending preview returns exactly HTTP 422 / IMPORT_PREVIEW_NOT_COMMIT_ELIGIBLE and leaves ledger/snapshot unchanged."
+      - "P2/P3 raw occurrence is zero in model capture, logs, traces and errors."
+      - "Invalid model schema publishes no downstream Artifact, ledger entry or snapshot; it records MODEL_STRUCTURED_OUTPUT_INVALID with retryable=false in FailureState, publishes run.failed, and retains only the latest already-committed CheckpointSummary allowed by the frozen contract."
+      - "The asynchronous scenario fails through FailureState/run.failed; the frozen synchronous ErrorResponse matrix, where applicable, maps the same code exactly to HTTP 502 with retryable=false."
+      - "Invalid model schema exposes no manual classification, preview revision, recovery command, endpoint, event or state transition in M01."
+    required_tests:
+      - "duplicate_file_is_idempotent"
+      - "preview_version_mismatch_returns_exact_409_code"
+      - "preview_hash_mismatch_returns_exact_409_code"
+      - "preview_not_commit_eligible_returns_exact_422_code"
+      - "privacy_boundary"
+      - "invalid_model_schema_fails_run_without_financial_effect"
+    privacy_classification: "Synthetic P2/P3 canaries only; required leakage count zero"
+    security_classification: "DATA_PRIVACY_RESILIENCE_GATE"
+    stub_real_boundary: "Certifies the approved real/stub boundary; no real cloud key or real user data."
+    estimated_effort: "2.0 engineering days"
+    merge_order: 25
+    notes:
+      - "Must pass before runtime recovery and the final M01 gate."
+
+  - task_id: M01-WP0104-T11
+    milestone: M01
+    work_package: WP-0104
+    title: "Worker restart, SSE resume and M01 exit certification"
+    goal: "Certify restart/replay semantics and publish the final M00/M01 machine-readable exit evidence."
+    status: BLOCKED_BY_DEPENDENCY
+    owner_stream: "Stream D — Product Integration / vertical integrator"
+    reviewer_stream: "Stream C — Runtime / Persistence"
+    architecture_refs:
+      - "Engineering Handoff §6 E2E tests 6–7 and Success criteria"
+      - "runtime-architecture.md: Recovery semantics"
+      - "Walking Skeleton Contract Addendum 1 §3.4 and §4.3"
+      - "testing-evaluation.md: Harness and Model Gateway"
+    input_contracts:
+      - "Successful data/privacy resilience gate M01-WP0104-T10"
+      - "CheckpointSummary, EventEnvelope and SSE replay contract 1.0.0"
+      - "All M00/M01 gate outputs"
+    dependencies: [M01-WP0104-T10, M01-WP0103-T05]
+    owned_paths:
+      - "/tests/e2e/walking_skeleton/runtime_recovery/**"
+      - "/tests/fault/walking_skeleton/**"
+      - "/docs/engineering/evidence/m01-conformance.json"
+      - "/scripts/ci/verify-m01.*"
+    allowed_paths:
+      - "/docs/engineering/evidence/README.md"
+    forbidden_paths:
+      - "/apps/**"
+      - "/packages/**"
+      - "/migrations/**"
+      - "/deploy/**"
+      - "/.github/workflows/**"
+      - "/docs/contracts/**"
+    implementation_scope:
+      - "Worker restart after model call/before Artifact commit, SSE disconnect/resume and full M01 gate aggregation."
+    out_of_scope:
+      - "Fixing core defects in the integration branch, changing contracts, public health or any M02+ behavior."
+    expected_outputs:
+      - "worker_restart_resume and sse_resume E2Es plus final M01 conformance manifest."
+    acceptance_criteria:
+      - "Worker restart creates one preview and one ledger commit with the same run/task identity and incremented attempt."
+      - "SSE replay loses no event and presents no duplicate after event_id dedupe."
+      - "Full unit/contract/integration/E2E/privacy/architecture suite passes against the exact architecture commit and schema hash."
+      - "Evidence includes all eight Handoff E2E results and the approved real/stub boundary."
+    required_tests:
+      - "worker_restart_resume"
+      - "sse_resume"
+      - "full M01 gate"
+    privacy_classification: "Synthetic P2/P3 canaries only; required leakage count zero"
+    security_classification: "MILESTONE_EXIT_GATE"
+    stub_real_boundary: "Certifies the approved real/stub boundary; no real cloud key or real user data."
+    estimated_effort: "1.5 engineering days"
+    merge_order: 26
+    notes:
+      - "Completes WP-0104 and M01."
+      - "M01 may exit with M01-WP0101-T05 still architecture-blocked because that public health body is outside the Walking Skeleton critical path."

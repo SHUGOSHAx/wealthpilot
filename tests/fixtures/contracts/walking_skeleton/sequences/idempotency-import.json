@@ -1,0 +1,1 @@
+{"fixture_sequence_version":"1.0.0","scenario":"import request idempotency","request_fixture":"import-request.json","idempotency_key":"fixture-import-key-1","attempts":2,"expected_same_fields":["import_id","run_id"],"expected_duplicate_postings":0,"different_fingerprint_error":"IDEMPOTENCY_KEY_REUSED"}

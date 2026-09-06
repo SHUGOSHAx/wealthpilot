@@ -1,0 +1,12 @@
+# High-conflict surfaces have one accountable owner. Later, more-specific
+# patterns override the conservative repository fallback.
+/*                                              @SHUGOSHAx
+/packages/python/wealthpilot/kernel/            @SHUGOSHAx
+/packages/python/wealthpilot/contracts/         @SHUGOSHAx
+/apps/api/                                      @SHUGOSHAx
+/apps/web/                                      @SHUGOSHAx
+/migrations/env.py                              @SHUGOSHAx
+/docker-compose.yml                             @SHUGOSHAx
+/deploy/compose/                                @SHUGOSHAx
+/docs/generated/openapi/                        @SHUGOSHAx
+/.github/workflows/                             @SHUGOSHAx

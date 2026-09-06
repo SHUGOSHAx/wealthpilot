@@ -1,0 +1,1 @@
+{"event_id":"70000000-0000-4000-8000-000000000001","run_id":"10000000-0000-4000-8000-000000000004","event_type":"run.created","occurred_at":"2026-09-01T08:00:01Z","sequence":1,"schema_version":"1.0.0","payload_version":"1.0.0","payload":{"run_type":"IMPORT_TO_FINANCIAL_SNAPSHOT","status":"RUNNING","created_at":"2026-09-01T08:00:01Z"}}

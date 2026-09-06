@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "artifact_id": "44444444-4444-4444-8444-444444444444",
+    "artifact_type": "IMPORT_PREVIEW",
+    "schema_version": "1.0.0",
+    "created_at": "2026-01-10T01:00:00Z",
+    "created_by": "wealthpilot.synthetic-fixture",
+    "run_id": "22222222-2222-4222-8222-222222222222",
+    "content_hash": "sha256:f3ce62d53f548d467a6e6af6d17fe049c4c25d2d6176ee1f15b30851c8b7e30a"
+  },
+  "import_id": "11111111-1111-4111-8111-111111111111",
+  "preview_version": 1,
+  "preview_hash": "sha256:f3ce62d53f548d467a6e6af6d17fe049c4c25d2d6176ee1f15b30851c8b7e30a",
+  "target_account_id": "33333333-3333-4333-8333-333333333333",
+  "source_file_reference": {
+    "source_type": "IMPORT_FILE",
+    "source_id": "generic_bank.csv",
+    "source_hash": "sha256:66b992b0e063e133e1b521214b53b00f5718f3b0d4e07dfcaea0a95f636af93d",
+    "locator": "bank/generic_bank.csv"
+  },
+  "items": [
+    {
+      "row_id": "60000000-0000-4000-8000-000000000001",
+      "source_row_number": 2,
+      "occurred_at": "2026-01-05T01:00:00Z",
+      "description": "SYNTHETIC_EMPLOYER_PAYROLL",
+      "direction": "INFLOW",
+      "amount": {"amount": "12000", "currency": "CNY"},
+      "category": "INCOME",
+      "classification_source": "RULE",
+      "status": "READY",
+      "source_reference": {"source_type": "IMPORT_ROW", "source_id": "synthetic-row-2", "source_hash": null, "locator": "csv:line=2"}
+    },
+    {
+      "row_id": "60000000-0000-4000-8000-000000000002",
+      "source_row_number": 3,
+      "occurred_at": "2026-01-06T02:00:00Z",
+      "description": "SYNTHETIC_HOME_RENT",
+      "direction": "OUTFLOW",
+      "amount": {"amount": "3200", "currency": "CNY"},
+      "category": "EXPENSE",
+      "classification_source": "RULE",
+      "status": "READY",
+      "source_reference": {"source_type": "IMPORT_ROW", "source_id": "synthetic-row-3", "source_hash": null, "locator": "csv:line=3"}
+    },
+    {
+      "row_id": "60000000-0000-4000-8000-000000000003",
+      "source_row_number": 4,
+      "occurred_at": "2026-01-07T03:30:00Z",
+      "description": "SYNTHETIC_GROCERY_STORE",
+      "direction": "OUTFLOW",
+      "amount": {"amount": "286.45", "currency": "CNY"},
+      "category": "EXPENSE",
+      "classification_source": "RULE",
+      "status": "READY",
+      "source_reference": {"source_type": "IMPORT_ROW", "source_id": "synthetic-row-4", "source_hash": null, "locator": "csv:line=4"}
+    },
+    {
+      "row_id": "60000000-0000-4000-8000-000000000004",
+      "source_row_number": 5,
+      "occurred_at": "2026-01-08T08:15:00Z",
+      "description": "SYNTHETIC_AMBIGUOUS_MERCHANT_X7",
+      "direction": "OUTFLOW",
+      "amount": {"amount": "88.8", "currency": "CNY"},
+      "category": "EXPENSE",
+      "classification_source": "MODEL",
+      "status": "READY",
+      "source_reference": {"source_type": "IMPORT_ROW", "source_id": "synthetic-row-5", "source_hash": null, "locator": "csv:line=5"}
+    },
+    {
+      "row_id": "60000000-0000-4000-8000-000000000005",
+      "source_row_number": 6,
+      "occurred_at": "2026-01-09T12:00:00Z",
+      "description": "SYNTHETIC_PROJECT_BONUS",
+      "direction": "INFLOW",
+      "amount": {"amount": "1500", "currency": "CNY"},
+      "category": "INCOME",
+      "classification_source": "RULE",
+      "status": "READY",
+      "source_reference": {"source_type": "IMPORT_ROW", "source_id": "synthetic-row-6", "source_hash": null, "locator": "csv:line=6"}
+    }
+  ],
+  "summary": {
+    "total_count": 5,
+    "ready_count": 5,
+    "needs_confirmation_count": 0,
+    "skipped_count": 0,
+    "conflict_count": 0,
+    "inflow_total": {"amount": "13500", "currency": "CNY"},
+    "outflow_total": {"amount": "3575.25", "currency": "CNY"}
+  },
+  "commit_eligible": true
+}

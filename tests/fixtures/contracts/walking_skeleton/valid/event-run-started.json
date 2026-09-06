@@ -1,0 +1,1 @@
+{"event_id":"70000000-0000-4000-8000-000000000002","run_id":"10000000-0000-4000-8000-000000000004","event_type":"run.started","occurred_at":"2026-09-01T08:00:02Z","sequence":2,"schema_version":"1.0.0","payload_version":"1.0.0","payload":{"status":"RUNNING","started_at":"2026-09-01T08:00:02Z"}}

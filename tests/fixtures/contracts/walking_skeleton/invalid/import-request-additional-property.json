@@ -1,0 +1,1 @@
+{"schema_version":"1.0.0","intent":"CREATE_LEDGER_ENTRIES_AND_FINANCIAL_SNAPSHOT","source_type":"GENERIC_BANK_CSV","target_account_id":"10000000-0000-4000-8000-000000000001","file_name":"synthetic.csv","as_of":"2026-09-01T08:00:00Z","extra":"forbidden"}

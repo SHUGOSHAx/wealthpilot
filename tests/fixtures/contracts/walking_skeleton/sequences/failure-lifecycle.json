@@ -1,0 +1,1 @@
+{"fixture_sequence_version":"1.0.0","scenario":"terminal failure after recovery exhausted","event_files":["event-run-created.json","event-run-started.json","event-run-progress.json","event-run-failed.json"],"expected_terminal_run_status":"FAILED","financial_effect":false}

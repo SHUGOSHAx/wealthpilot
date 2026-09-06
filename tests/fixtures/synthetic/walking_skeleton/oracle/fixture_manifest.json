@@ -1,0 +1,14 @@
+{
+  "manifest_version": "1.0.0",
+  "architecture_schema_sha256": "5b22d0a3e668244896483132d795794687b4b90379228c5815c0f32a1f7a1577",
+  "files": {
+    "tests/fixtures/security/privacy/walking_skeleton/bank_privacy_canary.csv": "38b61cfd9ef26bea5ad12d948587e9dd589d833f4161e854c31b607ce9c6ef53",
+    "tests/fixtures/security/privacy/walking_skeleton/canary_manifest.json": "9e0ed6306de501c0bcc294ec2ff11af4668e6f2efc12982ba3c2c5c5d293129c",
+    "tests/fixtures/synthetic/walking_skeleton/bank/generic_bank.csv": "66b992b0e063e133e1b521214b53b00f5718f3b0d4e07dfcaea0a95f636af93d",
+    "tests/fixtures/synthetic/walking_skeleton/bank/generic_bank.duplicate.csv": "66b992b0e063e133e1b521214b53b00f5718f3b0d4e07dfcaea0a95f636af93d",
+    "tests/fixtures/synthetic/walking_skeleton/oracle/financial_snapshot.json": "86ca5ce2cde55692ae46b1093c7e537f4eaaae85d73bc1179fdc32f6ec59a2ca",
+    "tests/fixtures/synthetic/walking_skeleton/oracle/import_preview.json": "5f9f7ab11d9c935648949bddfa3099c905ce9bcf52604bec1a6473859921cbdf",
+    "tests/fixtures/synthetic/walking_skeleton/oracle/import_request.json": "46d56547fdb53650a3e61659ee9bdae6556f595a442362be3e47494c5b5eb515",
+    "tests/fixtures/synthetic/walking_skeleton/oracle/ledger_oracle.json": "cc4e48110c09d6138c503d1b2273a4b1d0fcb24d9e9fd81ffc9c112260657bc0"
+  }
+}

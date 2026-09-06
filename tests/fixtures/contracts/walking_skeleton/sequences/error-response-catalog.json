@@ -1,0 +1,33 @@
+{
+  "fixture_sequence_version": "1.0.0",
+  "definition": "ErrorResponse",
+  "cases": [
+    ["VALIDATION_REQUEST_INVALID",400,false],
+    ["VALIDATION_FILE_EMPTY",422,false],
+    ["VALIDATION_FILE_TYPE_UNSUPPORTED",422,false],
+    ["IMPORT_NOT_FOUND",404,false],
+    ["HARNESS_RUN_NOT_FOUND",404,false],
+    ["IMPORT_PREVIEW_NOT_READY",409,true],
+    ["IMPORT_PREVIEW_VERSION_MISMATCH",409,false],
+    ["IMPORT_PREVIEW_HASH_MISMATCH",409,false],
+    ["IMPORT_PREVIEW_NOT_COMMIT_ELIGIBLE",422,false],
+    ["IDEMPOTENCY_KEY_REUSED",409,false],
+    ["IMPORT_ALREADY_COMMITTED",409,false],
+    ["PRIVACY_REDACTION_FAILED",403,false],
+    ["MODEL_STRUCTURED_OUTPUT_INVALID",502,false],
+    ["HARNESS_CHECKPOINT_UNAVAILABLE",503,true],
+    ["HARNESS_INVALID_STATE_TRANSITION",409,false],
+    ["SSE_CURSOR_INVALID",409,false],
+    ["LEDGER_UNBALANCED",500,false],
+    ["INTERNAL_UNEXPECTED",500,false]
+  ],
+  "response_template": {
+    "schema_version":"1.0.0",
+    "message":"Synthetic contract failure",
+    "trace_id":"90000000-0000-4000-8000-000000000001",
+    "stage":"fixture_validation",
+    "partial_artifacts":[],
+    "checkpoint_status":"NOT_APPLICABLE",
+    "recovery_action":null
+  }
+}

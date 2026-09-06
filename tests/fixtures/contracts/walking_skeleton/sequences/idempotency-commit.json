@@ -1,0 +1,1 @@
+{"fixture_sequence_version":"1.0.0","scenario":"commit command idempotency","request_fixture":"import-commit-command.json","idempotency_key":"fixture-commit-key-1","attempts":2,"expected_same_fields":["import_id","run_id"],"expected_commit_executions":1,"different_command_after_commit_error":"IMPORT_ALREADY_COMMITTED"}

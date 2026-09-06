@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "10000000-0000-4000-8000-000000000004",
+  "run_type": "IMPORT_TO_FINANCIAL_SNAPSHOT",
+  "status": "WAITING_FOR_INPUT",
+  "progress": {
+    "phase": "AWAITING_CONFIRMATION",
+    "percent": 60,
+    "completed_tasks": 3,
+    "total_tasks": 5,
+    "current_task_id": "40000000-0000-4000-8000-000000000003",
+    "updated_at": "2026-09-01T08:00:05Z"
+  },
+  "created_at": "2026-09-01T08:00:01Z",
+  "started_at": "2026-09-01T08:00:02Z",
+  "updated_at": "2026-09-01T08:00:05Z",
+  "completed_at": null,
+  "checkpoint": {
+    "checkpoint_id": "50000000-0000-4000-8000-000000000001",
+    "checkpoint_version": 1,
+    "task_id": "40000000-0000-4000-8000-000000000003",
+    "created_at": "2026-09-01T08:00:05Z",
+    "resumable": true
+  },
+  "failure": null,
+  "tasks": [
+    {
+      "task_id": "40000000-0000-4000-8000-000000000003",
+      "run_id": "10000000-0000-4000-8000-000000000004",
+      "task_type": "BUILD_IMPORT_PREVIEW",
+      "status": "WAITING_FOR_INPUT",
+      "attempt": 1,
+      "created_at": "2026-09-01T08:00:01Z",
+      "started_at": "2026-09-01T08:00:04Z",
+      "completed_at": null,
+      "input_artifacts": [],
+      "output_artifacts": [{
+        "artifact_id": "20000000-0000-4000-8000-000000000001",
+        "artifact_type": "IMPORT_PREVIEW",
+        "schema_version": "1.0.0",
+        "content_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      }],
+      "failure": null
+    }
+  ],
+  "artifacts": [{
+    "artifact_id": "20000000-0000-4000-8000-000000000001",
+    "artifact_type": "IMPORT_PREVIEW",
+    "schema_version": "1.0.0",
+    "content_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  }]
+}

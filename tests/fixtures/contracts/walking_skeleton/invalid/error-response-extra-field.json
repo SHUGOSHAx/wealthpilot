@@ -1,0 +1,1 @@
+{"schema_version":"1.0.0","error_code":"VALIDATION_REQUEST_INVALID","message":"Synthetic request is invalid","trace_id":"90000000-0000-4000-8000-000000000001","stage":"request_validation","retryable":false,"partial_artifacts":[],"checkpoint_status":"NOT_APPLICABLE","recovery_action":null,"detail":"forbidden"}
