@@ -4,7 +4,7 @@ set -euo pipefail
 repo_root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 cd "$repo_root"
 
-export WEALTHPILOT_MODE="${WEALTHPILOT_MODE:-DEMO}"
+export WEALTHPILOT_MODE="${WEALTHPILOT_MODE:-PERSONAL_LOCAL}"
 export WEALTHPILOT_HOST="${WEALTHPILOT_HOST:-127.0.0.1}"
 export WEALTHPILOT_PORT="${WEALTHPILOT_PORT:-8000}"
 

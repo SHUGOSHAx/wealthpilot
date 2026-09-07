@@ -13,6 +13,7 @@ def snapshot(**changes: object) -> dict[str, object]:
         "monthly_income": {"amount": "15000", "currency": "CNY"},
         "monthly_expenses": {"amount": "5000", "currency": "CNY"},
         "investable_capital": {"amount": "30000", "currency": "CNY"},
+        "existing_equity_exposure": {"amount": "20000", "currency": "CNY"},
     }
     base.update(changes)
     return base
@@ -27,6 +28,7 @@ def test_normal_allocation_uses_minimum_deterministic_limit() -> None:
         "cash_reserve_headroom": "30000",
         "single_security_limit": "8000",
         "risk_budget_limit": "15000",
+        "equity_headroom": "28000",
     }
 
 
@@ -61,3 +63,18 @@ def test_missing_required_input_produces_no_specific_position() -> None:
     assert result["personal_suitability"] == "INSUFFICIENT_DATA"
     assert result["recommended_max_allocation"] is None
     assert result["calculation"]["missing_inputs"] == ["investable_capital"]
+
+
+def test_financial_profiles_produce_different_position_limits() -> None:
+    constrained = RiskSuitabilityEngine().assess(snapshot(), research_risk_level="LOW")
+    stronger = RiskSuitabilityEngine().assess(
+        snapshot(
+            net_worth={"amount": "200000", "currency": "CNY"},
+            liquid_assets={"amount": "120000", "currency": "CNY"},
+            investable_capital={"amount": "90000", "currency": "CNY"},
+            existing_equity_exposure={"amount": "10000", "currency": "CNY"},
+        ),
+        research_risk_level="LOW",
+    )
+    assert constrained["recommended_max_allocation"]["amount"] == "8000"
+    assert stronger["recommended_max_allocation"]["amount"] == "20000"

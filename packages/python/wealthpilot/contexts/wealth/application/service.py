@@ -32,6 +32,8 @@ EXPECTED_HEADER: Final = (
     "currency",
     "liquid",
 )
+OPTIONAL_SOURCE_ID_HEADER: Final = EXPECTED_HEADER + ("source_transaction_id",)
+PERSONAL_HEADER: Final = OPTIONAL_SOURCE_ID_HEADER + ("asset_class",)
 _AMOUNT_PATTERN: Final = re.compile(r"^(?:0|[1-9][0-9]{0,13})(?:\.[0-9]{1,2})?$")
 _TWO_PLACES: Final = Decimal("0.01")
 
@@ -53,8 +55,11 @@ class _Record:
     account: str
     account_type: str
     category: str
+    description: str
     amount: Decimal
     liquid: bool
+    source_transaction_id: str | None = None
+    asset_class: str | None = None
 
 
 def _fail(code: str, row_number: int | None = None) -> None:
@@ -107,24 +112,30 @@ def _parse_rows(text: str) -> list[_Record]:
         _fail("EMPTY_FILE")
     except csv.Error:
         _fail("MALFORMED_CSV")
-    if tuple(header) != EXPECTED_HEADER:
+    parsed_header = tuple(header)
+    if parsed_header not in {EXPECTED_HEADER, OPTIONAL_SOURCE_ID_HEADER, PERSONAL_HEADER}:
         _fail("INVALID_HEADER")
+    has_source_id = parsed_header in {OPTIONAL_SOURCE_ID_HEADER, PERSONAL_HEADER}
+    has_asset_class = parsed_header == PERSONAL_HEADER
 
     records: list[_Record] = []
     try:
         for row_number, row in enumerate(reader, start=2):
             if not row or all(not value.strip() for value in row):
                 continue
+            while len(row) < len(parsed_header):
+                row.append("")
             if row_number - 1 > MAX_ROWS:
                 _fail("TOO_MANY_ROWS")
-            if len(row) != len(EXPECTED_HEADER):
+            if len(row) != len(parsed_header):
                 _fail("INVALID_COLUMN_COUNT", row_number)
             if any(len(value) > MAX_TEXT_LENGTH for value in row):
                 _fail("FIELD_TOO_LONG", row_number)
 
-            record_type, day, account, account_type, category, description, amount, currency, liquid = (
-                value.strip() for value in row
-            )
+            values = [value.strip() for value in row]
+            record_type, day, account, account_type, category, description, amount, currency, liquid = values[:9]
+            source_transaction_id = values[9] if has_source_id and values[9] else None
+            asset_class = values[10].upper() if has_asset_class and values[10] else None
             if record_type not in {"BALANCE", "TRANSACTION"}:
                 _fail("INVALID_RECORD_TYPE", row_number)
             if account_type not in {"ASSET", "LIABILITY"}:
@@ -137,6 +148,10 @@ def _parse_rows(text: str) -> list[_Record]:
                 _fail("INVALID_LIQUID_FLAG", row_number)
             if record_type == "BALANCE" and category:
                 _fail("INVALID_BALANCE_CATEGORY", row_number)
+            if record_type == "BALANCE" and asset_class not in {
+                None, "CASH", "EQUITY", "FIXED_INCOME", "REAL_ESTATE", "OTHER"
+            }:
+                _fail("INVALID_ASSET_CLASS", row_number)
             if record_type == "TRANSACTION" and category not in {"INCOME", "EXPENSE"}:
                 _fail("INVALID_TRANSACTION_CATEGORY", row_number)
 
@@ -147,8 +162,11 @@ def _parse_rows(text: str) -> list[_Record]:
                     account=account,
                     account_type=account_type,
                     category=category,
+                    description=description,
                     amount=_parse_amount(amount, row_number),
                     liquid=liquid == "true",
+                    source_transaction_id=source_transaction_id,
+                    asset_class=asset_class,
                 )
             )
     except csv.Error:
@@ -222,11 +240,23 @@ def build_financial_snapshot(csv_bytes: bytes) -> dict[str, object]:
             "account_type": account_type,
             "balance": _money(amount),
             "liquid": liquid,
+            "asset_class": next(
+                (
+                    record.asset_class or "UNKNOWN"
+                    for record in records
+                    if record.record_type == "BALANCE" and record.account == name
+                ),
+                "UNKNOWN",
+            ),
         }
         for (name, account_type, liquid), amount in sorted(balances.items())
     ]
 
-    return {
+    allocation: dict[str, Decimal] = defaultdict(Decimal)
+    for item in account_items:
+        if item["account_type"] == "ASSET":
+            allocation[str(item["asset_class"])] += Decimal(str(item["balance"]["amount"]))
+    snapshot = {
         "schema_version": "0.1.0-mvp",
         "as_of": as_of.isoformat().replace("+00:00", "Z"),
         "source": {
@@ -247,6 +277,7 @@ def build_financial_snapshot(csv_bytes: bytes) -> dict[str, object]:
         "emergency_fund_months": format_decimal(emergency_months) if emergency_months is not None else None,
         "reserved_goals": _money(Decimal("0")),
         "investable_capital": _money(max(Decimal("0"), liquid_assets - monthly_expenses * Decimal("6"))),
+        "asset_allocation": {key: _money(value) for key, value in sorted(allocation.items())},
         "data_quality": {
             "status": "DEMO_VALIDATED",
             "currency": CNY,
@@ -255,3 +286,6 @@ def build_financial_snapshot(csv_bytes: bytes) -> dict[str, object]:
             ),
         },
     }
+    if "UNKNOWN" not in allocation:
+        snapshot["existing_equity_exposure"] = _money(allocation.get("EQUITY", Decimal("0")))
+    return snapshot

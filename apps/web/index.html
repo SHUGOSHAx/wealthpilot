@@ -1,258 +1,104 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#f4f1e9" />
-    <meta
-      name="description"
-      content="WealthPilot 合成数据财富研究演示：从个人财务快照到个性化证券研究。"
-    />
-    <title>WealthPilot · Personal Wealth Research</title>
-    <link rel="stylesheet" href="./styles.css" />
-    <script type="module" src="./app.js"></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">跳到主要内容</a>
-    <div class="page-shell">
-      <header class="topbar">
-        <a class="brand" href="#" aria-label="WealthPilot 首页">
-          <span class="brand-mark" aria-hidden="true">W</span>
-          <span>
-            <strong>WealthPilot</strong>
-            <small>Personal Wealth Research</small>
-          </span>
-        </a>
-        <div class="topbar-meta">
-          <span class="environment-pill">DEMO · SYNTHETIC DATA</span>
-          <span id="api-status" class="api-status is-checking" role="status">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span>正在连接</span>
-          </span>
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="theme-color" content="#f3f0e8" />
+  <meta name="description" content="WealthPilot 本地个人财富工作台" /><title>WealthPilot · 个人财富工作台</title>
+  <link rel="stylesheet" href="/styles.css" /><script type="module" src="/app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#workspace">跳到主要内容</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="主导航">
+    <a class="brand" href="#overview" aria-label="WealthPilot 总览"><span class="brand-mark" aria-hidden="true">W</span><span><strong>WealthPilot</strong><small>LOCAL WEALTH DESK</small></span></a>
+    <nav class="primary-nav">
+      <a href="#overview" data-route="overview" class="is-active"><span aria-hidden="true">⌂</span>总览</a>
+      <a href="#transactions" data-route="transactions"><span aria-hidden="true">≋</span>交易流水</a>
+      <a href="#import" data-route="import"><span aria-hidden="true">↥</span>导入数据</a>
+      <a href="#research" data-route="research"><span aria-hidden="true">◇</span>证券研究</a>
+      <a href="#settings" data-route="settings"><span aria-hidden="true">⚙</span>设置与数据</a>
+    </nav>
+    <div class="sidebar-foot"><span class="local-pill"><i aria-hidden="true"></i> 本地个人模式</span><p>数据默认保留在你的本机环境。</p></div>
+  </aside>
+  <div class="app-body">
+    <header class="topbar">
+      <button id="mobile-menu" class="icon-button mobile-only" type="button" aria-label="打开导航" aria-expanded="false">☰</button>
+      <div><p id="page-eyebrow">PERSONAL OVERVIEW</p><h1 id="page-title">财务总览</h1></div>
+      <div class="topbar-status"><span id="api-status" class="api-status is-checking" role="status"><i aria-hidden="true"></i><span>正在连接</span></span><button id="refresh-page" class="icon-button" type="button" aria-label="刷新当前页面">↻</button></div>
+    </header>
+    <div class="safety-strip" role="note"><strong>NO LIVE SIDE EFFECT</strong><span>仅提供财务分析、研究与模拟决策支持；不会连接券商或提交真实订单。</span></div>
+    <main id="workspace" tabindex="-1">
+      <div id="global-error" class="alert alert-error" role="alert" hidden></div>
+
+      <section id="page-overview" class="page is-active" data-page="overview" aria-labelledby="overview-heading">
+        <div id="overview-loading" class="skeleton-stack" aria-label="正在加载总览"><span></span><span></span><span></span></div>
+        <div id="first-run" class="first-run" hidden>
+          <div class="first-run-art" aria-hidden="true"><span>¥</span><i></i><i></i><i></i></div>
+          <div><p class="kicker">FIRST STEP</p><h2>从真实可核对的财务上下文开始</h2><p>还没有本地财务快照。上传你导出的 CSV，或先用内置 synthetic 样例熟悉完整流程。</p><div class="button-row"><a class="button button-primary" href="#import">导入我的 CSV</a><button id="overview-demo" class="button button-secondary" type="button">使用 synthetic 样例</button></div><small>样例仅用于体验，不代表你的真实财务状况。</small></div>
         </div>
-      </header>
-
-      <main id="main">
-        <section class="hero" aria-labelledby="page-title">
-          <div class="hero-copy">
-            <p class="eyebrow">YOUR FINANCES, IN CONTEXT</p>
-            <h1 id="page-title">先看全局，再谈一只股票。</h1>
-            <p class="hero-lede">
-              从一份合成财务流水开始，建立你的完整财务快照，再获得与承受能力相匹配的研究结论。
-            </p>
+        <div id="overview-content" hidden>
+          <div class="page-heading" id="overview-heading"><div><p class="kicker">CURRENT POSITION</p><h2>今天的财务位置</h2></div><div class="updated">更新于 <time id="overview-as-of">—</time><button id="overview-provenance" type="button" class="text-button">查看来源</button></div></div>
+          <div class="metric-grid">
+            <article class="metric-card metric-hero"><span>净资产</span><strong id="overview-net-worth" data-testid="net-worth">—</strong><small>资产 − 负债</small></article>
+            <article class="metric-card"><span>总资产</span><strong id="overview-assets" data-testid="assets">—</strong><small id="asset-account-count">所有账户</small></article>
+            <article class="metric-card"><span>总负债</span><strong id="overview-liabilities" data-testid="liabilities">—</strong><small>当前待偿还</small></article>
+            <article class="metric-card"><span>本月净现金流</span><strong id="overview-cash-flow" data-testid="cash-flow">—</strong><small id="cash-flow-breakdown">收入 − 支出</small></article>
           </div>
-          <div class="hero-orbit" aria-hidden="true">
-            <div class="orbit-core"><span>净资产</span><strong>¥</strong></div>
-            <span class="orbit-dot dot-one"></span>
-            <span class="orbit-dot dot-two"></span>
-            <span class="orbit-dot dot-three"></span>
+          <div class="overview-grid">
+            <article class="card safety-card"><div class="card-heading"><div><p class="kicker">FINANCIAL BUFFER</p><h3>财务安全垫</h3></div><span id="buffer-status" class="status-badge">—</span></div><div class="buffer-visual"><div class="buffer-ring" id="buffer-ring" style="--progress:0"><div><strong id="emergency-months">—</strong><span>个月</span></div></div><div class="buffer-copy"><span>月均支出</span><strong id="monthly-expenses">—</strong><span>可投资资金</span><strong id="investable-capital">—</strong></div></div><details class="calculation-cue"><summary>计算口径</summary><p>数据由确定性财务引擎根据已确认交易计算，模型不参与权威数值计算。</p></details></article>
+            <article class="card"><div class="card-heading"><div><p class="kicker">RECENT ACTIVITY</p><h3>最近交易</h3></div><a href="#transactions" class="text-link">查看全部</a></div><div id="recent-transactions" class="transaction-list empty-box">暂无交易</div></article>
           </div>
-        </section>
-
-        <nav class="journey" aria-label="演示流程">
-          <ol>
-            <li class="is-active" data-step-indicator="1"><span>01</span>导入财务数据</li>
-            <li data-step-indicator="2"><span>02</span>查看财务快照</li>
-            <li data-step-indicator="3"><span>03</span>研究个人适配性</li>
-          </ol>
-        </nav>
-
-        <section id="import-section" class="panel import-panel" aria-labelledby="import-title">
-          <div class="panel-heading">
-            <div>
-              <p class="section-kicker">STEP 01</p>
-              <h2 id="import-title">建立个人财务上下文</h2>
-              <p>上传符合演示格式的 synthetic CSV，或使用内置示例开始。</p>
-            </div>
-            <span class="privacy-badge">仅限合成数据</span>
+          <div class="overview-grid">
+            <article class="card"><div class="card-heading"><div><p class="kicker">ACCOUNTS</p><h3>账户余额</h3></div></div><div id="account-list" class="snapshot-list"></div></article>
+            <article class="card"><div class="card-heading"><div><p class="kicker">ASSET ALLOCATION</p><h3>基础资产配置</h3></div></div><div id="allocation-list" class="snapshot-list"></div></article>
           </div>
+          <article class="research-cta"><div><p class="kicker">PERSONAL RESEARCH</p><h3>把下一次投资判断放回你的财务全局</h3><p>研究结果会结合最新快照，但最大建议仓位始终由确定性规则计算。</p></div><a href="#research" class="button button-light">开始证券研究</a></article>
+        </div>
+      </section>
 
-          <div class="upload-zone" id="upload-zone" data-testid="upload-zone">
-            <input id="csv-file" type="file" accept=".csv,text/csv" />
-            <div class="upload-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 002 2h10a2 2 0 002-2v-4" /></svg>
-            </div>
-            <div>
-              <strong id="file-label">拖入 CSV，或选择文件</strong>
-              <span>请勿上传真实姓名、账号、卡号或凭据</span>
-            </div>
-            <button id="choose-file" type="button" class="button button-secondary">选择 CSV</button>
-          </div>
+      <section id="page-transactions" class="page" data-page="transactions" aria-labelledby="transactions-heading" hidden>
+        <div class="page-heading"><div><p class="kicker">AUTHORITATIVE RECORDS</p><h2 id="transactions-heading">交易流水</h2><p>筛选、核对并修正已确认交易。所有变更保留更新时间和来源。</p></div><a class="button button-primary" href="#import">＋ 导入新流水</a></div>
+        <div class="toolbar" aria-label="交易筛选"><label class="search-field"><span class="sr-only">搜索交易</span><input id="transaction-search" type="search" placeholder="搜索商户、分类或备注" /></label><label><span class="sr-only">分类</span><select id="transaction-category-filter"><option value="">全部分类</option></select></label><label><span class="sr-only">方向</span><select id="transaction-direction-filter"><option value="">全部收支</option><option value="INFLOW">收入</option><option value="OUTFLOW">支出</option></select></label><span id="transaction-count" class="result-count">0 条</span></div>
+        <div id="transactions-loading" class="skeleton-table" hidden></div>
+        <div id="transactions-empty" class="empty-state" hidden><span aria-hidden="true">≋</span><h3>没有匹配的交易</h3><p>调整筛选条件，或导入一份新的 CSV。</p></div>
+        <div id="transactions-table-wrap" class="table-card" hidden><table class="data-table"><thead><tr><th>日期</th><th>商户 / 说明</th><th>分类</th><th>来源</th><th class="amount-cell">金额</th><th><span class="sr-only">操作</span></th></tr></thead><tbody id="transactions-body"></tbody></table></div>
+      </section>
 
-          <div class="import-actions">
-            <button id="load-demo" type="button" class="button button-primary" data-testid="load-demo">
-              <span class="button-icon" aria-hidden="true">✦</span>
-              使用演示数据
-            </button>
-            <button id="import-file" type="button" class="button button-dark" disabled data-testid="import-file">
-              生成财务快照
-            </button>
-            <p id="import-status" class="inline-status" role="status" aria-live="polite"></p>
-          </div>
-          <div id="import-error" class="alert alert-error" role="alert" hidden></div>
-        </section>
+      <section id="page-import" class="page" data-page="import" aria-labelledby="import-heading" hidden>
+        <div class="page-heading"><div><p class="kicker">REVIEW BEFORE COMMIT</p><h2 id="import-heading">导入财务数据</h2><p>先预览、处理重复与冲突，再明确确认写入。确认后修正会留下记录。</p></div></div>
+        <div id="import-picker" class="card import-picker"><div id="drop-zone" class="drop-zone" data-testid="upload-zone"><input id="import-file-input" type="file" accept=".csv,text/csv" /><span class="drop-icon" aria-hidden="true">↥</span><div><strong id="import-file-name">拖入 CSV，或选择本机文件</strong><p>最大 1 MiB · 请勿上传凭据或未授权的他人数据</p></div><button id="choose-import-file" class="button button-secondary" type="button">选择 CSV</button></div><div class="import-picker-actions"><button id="preview-import" class="button button-primary" type="button" disabled>生成导入预览</button><span>或</span><button id="load-sample" class="text-button" type="button">载入 synthetic 样例</button></div><div id="import-error" class="alert alert-error" role="alert" hidden></div></div>
+        <div id="preview-loading" class="progress-card" hidden aria-live="polite"><span class="spinner" aria-hidden="true"></span><div><strong>正在安全解析 CSV</strong><p>识别账户、交易、重复和待确认项…</p></div></div>
+        <div id="import-preview" hidden>
+          <div class="preview-header"><div><p class="kicker">IMPORT PREVIEW</p><h3>写入前核对</h3><p id="preview-batch-id">批次 —</p></div><button id="discard-preview" class="text-button" type="button">放弃本次预览</button></div>
+          <div class="summary-grid"><article><span>新增</span><strong id="preview-new">0</strong></article><article><span>重复跳过</span><strong id="preview-duplicate">0</strong></article><article><span>冲突</span><strong id="preview-conflict">0</strong></article><article><span>待确认</span><strong id="preview-review">0</strong></article></div>
+          <div class="preview-note"><strong>为什么需要确认？</strong><span>重复项默认跳过；冲突和低置信度分类会明确标出。可在写入前修改商户、分类和处理标记。</span></div>
+          <div class="table-card preview-table-card"><table class="data-table preview-table"><thead><tr><th>状态</th><th>日期 / 说明</th><th>商户</th><th>分类</th><th class="amount-cell">金额</th><th>处理</th></tr></thead><tbody id="preview-body"></tbody></table></div>
+          <div class="confirm-bar"><div><label class="confirm-check"><input id="confirm-reviewed" type="checkbox" />我已核对冲突和待确认项</label><small id="confirm-help">确认后将写入本地权威流水并生成新快照。</small></div><button id="confirm-import" class="button button-dark" type="button" disabled>确认导入</button></div><div id="confirm-error" class="alert alert-error" role="alert" hidden></div>
+        </div>
+        <div id="import-success" class="success-state" hidden><span aria-hidden="true">✓</span><div><h3>导入已确认</h3><p id="import-success-copy">新快照已经生成。</p></div><a href="#overview" class="button button-primary">查看更新后的总览</a></div>
+      </section>
 
-        <section id="snapshot-section" class="section-block" aria-labelledby="snapshot-title" hidden>
-          <div class="section-heading-row">
-            <div>
-              <p class="section-kicker">STEP 02</p>
-              <h2 id="snapshot-title">你的财务安全边界</h2>
-            </div>
-            <div class="as-of">快照时点 <time id="snapshot-as-of">—</time></div>
-          </div>
+      <section id="page-research" class="page" data-page="research" aria-labelledby="research-heading" hidden>
+        <div class="page-heading"><div><p class="kicker">CONTEXT-AWARE RESEARCH</p><h2 id="research-heading">证券研究</h2><p>获取带时点的公开 A 股数据，再由确定性适配引擎结合你的最新财务快照。</p></div><span id="research-context" class="context-pill">等待财务快照</span></div>
+        <div class="research-layout"><div>
+          <form id="research-form" class="card research-form" data-testid="research-form"><label class="field"><span>A 股代码</span><input id="research-symbol" value="600519" inputmode="numeric" maxlength="8" required /></label><label class="field"><span>你的问题</span><textarea id="research-question" rows="4" required>结合我的财务状况，这只股票是否适合我？</textarea></label><div class="form-foot"><span>解释由统一 Model Gateway 生成</span><button id="run-research" class="button button-dark" type="submit">生成研究备忘录</button></div><div id="research-error" class="alert alert-error" role="alert" hidden></div></form>
+          <div id="research-loading" class="progress-card" hidden><span class="spinner" aria-hidden="true"></span><div><strong>正在生成个性化研究</strong><p>读取 BaoStock 公开数据 → 结构化解释 → 确定性适配计算</p></div></div>
+          <article id="research-result" class="research-result" hidden><div class="memo-head"><div><p class="kicker">STRUCTURED MEMO</p><h3><span id="memo-symbol">—</span> · <span id="memo-name">—</span></h3></div><div><span>资料截止</span><time id="memo-as-of">—</time><small id="memo-model">Model Gateway</small></div></div><div class="memo-decision"><div><span>研究摘要</span><h4 id="memo-summary">—</h4><p id="memo-suitability">—</p></div><div class="allocation"><strong id="memo-allocation">—</strong><span>最大建议仓位</span><small id="memo-allocation-amount">确定性计算</small></div></div><div class="memo-columns"><section><h4><i class="positive-icon">＋</i>关键积极因素</h4><ul id="memo-positives"></ul></section><section><h4><i class="risk-icon">!</i>关键风险</h4><ul id="memo-risks"></ul></section></div><section class="evidence-section"><div><h4>证据 / 数据摘要</h4><span id="memo-coverage">缓存数据</span></div><div id="memo-evidence" class="evidence-grid"></div></section><div class="risk-warning"><strong>风险提示</strong><p id="memo-warning">—</p></div><div class="no-trade"><strong>NO LIVE SIDE EFFECT</strong><span>不会连接券商、提交订单或执行真实交易。</span></div></article>
+        </div><aside class="card history-card"><div class="card-heading"><div><p class="kicker">HISTORY</p><h3>研究历史</h3></div><button id="refresh-history" class="icon-button" type="button" aria-label="刷新研究历史">↻</button></div><div id="research-history" class="history-list empty-box">暂无研究记录</div></aside></div>
+      </section>
 
-          <div class="metrics-grid">
-            <article class="metric-card metric-primary">
-              <span>净资产</span>
-              <strong id="metric-net-worth" data-testid="net-worth">—</strong>
-              <small>资产 − 负债</small>
-            </article>
-            <article class="metric-card">
-              <span>总资产</span>
-              <strong id="metric-assets" data-testid="assets">—</strong>
-              <small>当前可见账户合计</small>
-            </article>
-            <article class="metric-card">
-              <span>总负债</span>
-              <strong id="metric-liabilities" data-testid="liabilities">—</strong>
-              <small>待偿还债务合计</small>
-            </article>
-          </div>
-
-          <div class="insight-grid">
-            <article class="insight-card">
-              <div class="insight-icon cashflow" aria-hidden="true">↗</div>
-              <div>
-                <span>月度现金流</span>
-                <strong id="metric-cash-flow">—</strong>
-              </div>
-              <p id="cash-flow-detail">收入与支出的确定性汇总</p>
-            </article>
-            <article class="insight-card">
-              <div class="insight-icon spending" aria-hidden="true">≋</div>
-              <div>
-                <span>月均支出</span>
-                <strong id="metric-monthly-spend">—</strong>
-              </div>
-              <p>用于评估流动性与承受能力</p>
-            </article>
-            <article class="insight-card">
-              <div class="insight-icon runway" aria-hidden="true">◷</div>
-              <div>
-                <span>应急储备</span>
-                <strong id="metric-emergency-months">—</strong>
-              </div>
-              <p>由确定性财务引擎计算</p>
-            </article>
-          </div>
-
-          <details class="formula-note">
-            <summary>这些数字如何计算？</summary>
-            <p>
-              所有权威数值均由后端 deterministic financial engine 计算。模型只负责研究解释，不参与资产、负债、现金流或最大建议仓位的数值计算。
-            </p>
-          </details>
-        </section>
-
-        <section id="research-section" class="panel research-panel" aria-labelledby="research-title" hidden>
-          <div class="panel-heading">
-            <div>
-              <p class="section-kicker">STEP 03</p>
-              <h2 id="research-title">把投资问题放回你的生活里</h2>
-              <p>研究标的本身，也评估它是否适合你当前的财务安全边界。</p>
-            </div>
-          </div>
-
-          <form id="research-form" data-testid="research-form">
-            <div class="form-grid">
-              <label class="field">
-                <span>A 股标的</span>
-                <select id="symbol-select" name="symbol" data-testid="symbol-select">
-                  <option value="600519">600519 · 贵州茅台</option>
-                </select>
-              </label>
-              <label class="field field-question">
-                <span>你的问题</span>
-                <textarea id="research-question" name="question" rows="3" required>结合我的财务状况，这只股票是否适合我？</textarea>
-              </label>
-            </div>
-            <div class="research-actions">
-              <p class="model-note"><span aria-hidden="true">◆</span> Research Service 经统一 Model Gateway 生成解释</p>
-              <button id="run-research" class="button button-dark" type="submit" data-testid="run-research">
-                生成个性化研究
-              </button>
-            </div>
-          </form>
-          <div id="research-error" class="alert alert-error" role="alert" hidden></div>
-        </section>
-
-        <section id="research-loading" class="research-loading" aria-live="polite" hidden>
-          <div class="research-loader" aria-hidden="true"><span></span><span></span><span></span></div>
-          <div><strong>正在生成结构化研究备忘录</strong><p id="loading-stage">读取缓存研究资料…</p></div>
-        </section>
-
-        <section id="result-section" class="section-block result-section" aria-labelledby="result-title" hidden>
-          <div class="result-header">
-            <div>
-              <p class="section-kicker">STRUCTURED RESEARCH MEMO</p>
-              <h2 id="result-title"><span id="result-symbol">—</span> · <span id="result-name">—</span></h2>
-            </div>
-            <div class="result-meta">
-              <span>缓存数据截止 <time id="research-as-of">—</time></span>
-              <span id="model-version">Model Gateway</span>
-            </div>
-          </div>
-
-          <div class="decision-card">
-            <div class="decision-copy">
-              <span class="decision-label">研究结论</span>
-              <h3 id="research-summary" data-testid="research-summary">—</h3>
-              <p id="suitability-copy">—</p>
-            </div>
-            <div class="allocation-gauge">
-              <div class="gauge" id="allocation-gauge" style="--allocation: 0">
-                <div><strong id="max-allocation" data-testid="max-allocation">—</strong><span>建议上限</span></div>
-              </div>
-              <small id="max-allocation-amount">由确定性适配引擎计算</small>
-            </div>
-          </div>
-
-          <div class="memo-grid">
-            <article class="memo-card positive">
-              <div class="memo-title"><span aria-hidden="true">＋</span><h3>关键积极因素</h3></div>
-              <ul id="positives-list"></ul>
-            </article>
-            <article class="memo-card risk">
-              <div class="memo-title"><span aria-hidden="true">!</span><h3>关键风险</h3></div>
-              <ul id="risks-list"></ul>
-            </article>
-          </div>
-
-          <article class="evidence-card">
-            <div class="evidence-heading">
-              <div><span class="evidence-icon" aria-hidden="true">◎</span><h3>证据与数据摘要</h3></div>
-              <span id="coverage-badge" class="coverage-badge">缓存演示数据</span>
-            </div>
-            <div id="evidence-list" class="evidence-list"></div>
-          </article>
-
-          <div class="warning-card" role="note">
-            <span class="warning-icon" aria-hidden="true">!</span>
-            <div><strong>风险提示</strong><p id="risk-warning">—</p></div>
-          </div>
-
-          <div class="no-trade-banner">
-            <strong>NO LIVE SIDE EFFECT</strong>
-            <span>本演示仅提供研究与模拟决策支持，不会连接券商、提交订单或执行任何真实交易。</span>
-          </div>
-        </section>
-      </main>
-
-      <footer>
-        <span>WealthPilot MVP · Synthetic Demo</span>
-        <p>不构成投资建议。历史与缓存数据不代表未来表现，请结合自身情况独立判断。</p>
-      </footer>
-    </div>
-  </body>
+      <section id="page-settings" class="page" data-page="settings" aria-labelledby="settings-heading" hidden>
+        <div class="page-heading"><div><p class="kicker">LOCAL CONTROL</p><h2 id="settings-heading">设置与数据</h2><p>检查模型服务状态，备份或恢复本地个人数据。</p></div></div>
+        <div class="settings-grid">
+          <article class="card setting-card"><div class="setting-icon" aria-hidden="true">◇</div><div><h3>Model Gateway</h3><p>研究解释的统一模型出口。权威财务数字与仓位不由模型决定。</p><dl><div><dt>Provider</dt><dd id="setting-provider">—</dd></div><div><dt>Model</dt><dd id="setting-model">—</dd></div><div><dt>状态</dt><dd><span id="setting-model-status" class="status-badge">—</span></dd></div></dl></div></article>
+          <article class="card setting-card"><div class="setting-icon" aria-hidden="true">▣</div><div><h3>本地数据</h3><p id="setting-data-copy">你的快照、流水与研究历史保存在本地。</p><div class="button-row"><button id="backup-data" class="button button-primary" type="button">下载校验备份</button><button id="choose-restore" class="button button-secondary" type="button">恢复备份</button><input id="restore-file" type="file" accept=".wpbackup,application/octet-stream" hidden /></div><div id="data-action-status" class="inline-message" role="status"></div></div></article>
+          <article class="card setting-card span-two"><div class="setting-icon" aria-hidden="true">◷</div><div><h3>快照与来源</h3><p>历史快照是确定性计算结果，用于追溯当时的财务上下文。</p><div id="snapshot-history" class="snapshot-list empty-box">暂无快照记录</div></div></article>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<nav class="mobile-nav" aria-label="移动端主导航"><a href="#overview" data-route="overview"><span>⌂</span>总览</a><a href="#transactions" data-route="transactions"><span>≋</span>流水</a><a href="#import" data-route="import"><span>↥</span>导入</a><a href="#research" data-route="research"><span>◇</span>研究</a><a href="#settings" data-route="settings"><span>⚙</span>设置</a></nav>
+<dialog id="transaction-dialog" aria-labelledby="transaction-dialog-title"><form id="transaction-form" method="dialog"><div class="dialog-head"><div><p class="kicker">CORRECT TRANSACTION</p><h2 id="transaction-dialog-title">修正交易</h2></div><button class="icon-button" value="cancel" aria-label="关闭">×</button></div><p id="transaction-dialog-meta" class="dialog-meta">—</p><label class="field"><span>商户 / 说明</span><input id="edit-merchant" maxlength="120" required /></label><label class="field"><span>分类</span><input id="edit-category" maxlength="80" required /></label><fieldset><legend>处理标记</legend><label><input id="edit-exclude" type="checkbox" /> 待报销 / 报销项（不计入日常支出）</label><label><input id="edit-transfer" type="checkbox" /> 内部转账</label></fieldset><div id="transaction-error" class="alert alert-error" role="alert" hidden></div><div class="dialog-actions"><button class="button button-secondary" value="cancel">取消</button><button id="save-transaction" class="button button-dark" value="default">保存修正</button></div></form></dialog>
+<dialog id="provenance-dialog" aria-labelledby="provenance-title"><div class="dialog-head"><div><p class="kicker">PROVENANCE</p><h2 id="provenance-title">快照来源与计算</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="关闭">×</button></div><dl id="provenance-content" class="provenance-list"></dl></dialog>
+</body>
 </html>

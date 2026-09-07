@@ -14,6 +14,7 @@ def complete_snapshot() -> dict[str, object]:
         "monthly_income": {"amount": "15000", "currency": "CNY"},
         "monthly_expenses": {"amount": "5000", "currency": "CNY"},
         "investable_capital": {"amount": "30000", "currency": "CNY"},
+        "existing_equity_exposure": {"amount": "20000", "currency": "CNY"},
         "transactions": [{"description": "PRIVATE RAW MERCHANT", "amount": "1"}],
         "account_balances": [{"account_id": "LOCAL-PRIVATE-ID"}],
     }

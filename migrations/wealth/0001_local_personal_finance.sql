@@ -1,0 +1,7 @@
+-- Schema version 1 is executed transactionally by
+-- wealthpilot.adapters.persistence.migrations.  That module is the executable
+-- migration authority so installed packages do not depend on a repository path.
+--
+-- Tables: schema_migrations, import_batches, import_balance_observations,
+-- normalized_transactions, transaction_corrections, journal_entries, postings,
+-- financial_snapshots.

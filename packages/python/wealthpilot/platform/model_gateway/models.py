@@ -14,10 +14,12 @@ class ModelRequest:
     financial_metrics: dict[str, str]
     privacy_level: str = "P1"
     task_type: str = "MVP_RESEARCH_NARRATIVE"
+    response_contract: str = "NARRATIVE_V1"
 
     def as_payload(self) -> dict[str, Any]:
         return {
             "task_type": self.task_type,
+            "response_contract": self.response_contract,
             "symbol": self.symbol,
             "question": self.question,
             "public_research": self.public_research,

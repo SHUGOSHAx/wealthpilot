@@ -15,6 +15,7 @@ _REQUIRED = (
     "monthly_income",
     "monthly_expenses",
     "investable_capital",
+    "existing_equity_exposure",
 )
 _RISK_BUDGET = {"LOW": Decimal("0.75"), "MEDIUM": Decimal("0.50"), "HIGH": Decimal("0.25")}
 
@@ -61,6 +62,7 @@ class RiskSuitabilityEngine:
 
     reserve_months = Decimal("6")
     single_security_limit = Decimal("0.10")
+    equity_limit = Decimal("0.60")
 
     def assess(self, snapshot: Any, *, research_risk_level: str) -> dict[str, Any]:
         metrics, currency = extract_financial_metrics(snapshot)
@@ -89,6 +91,10 @@ class RiskSuitabilityEngine:
             "cash_reserve_headroom": reserve_headroom,
             "single_security_limit": max(net_worth * self.single_security_limit, Decimal("0")),
             "risk_budget_limit": max(metrics["investable_capital"] * _RISK_BUDGET[risk_level], Decimal("0")),
+            "equity_headroom": max(
+                net_worth * self.equity_limit - metrics["existing_equity_exposure"],
+                Decimal("0"),
+            ),
         }
 
         if net_worth <= 0:
@@ -97,6 +103,8 @@ class RiskSuitabilityEngine:
             suitability, warning, maximum = "UNSUITABLE", "月度现金流不足，应先恢复收支安全边际。", Decimal("0")
         elif reserve_headroom <= 0:
             suitability, warning, maximum = "UNSUITABLE", "流动资产未覆盖六个月应急储备，不建议建立仓位。", Decimal("0")
+        elif limits["equity_headroom"] <= 0:
+            suitability, warning, maximum = "CAUTION", "现有权益暴露已达到个人使用版上限，不建议增加仓位。", Decimal("0")
         else:
             maximum = max(min(limits.values()) - existing_position, Decimal("0"))
             suitability = "CAUTION" if risk_level == "HIGH" else "SUITABLE"
@@ -137,6 +145,7 @@ def extract_financial_metrics(snapshot: Any) -> tuple[dict[str, Decimal], str]:
         "monthly_expenses": ("monthly_expenses", "total_outflows", "outflow"),
         "investable_capital": ("investable_capital",),
         "existing_position_value": ("existing_position_value",),
+        "existing_equity_exposure": ("existing_equity_exposure", "equity_exposure"),
     }
     metrics: dict[str, Decimal] = {}
     for canonical, names in aliases.items():
